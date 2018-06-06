@@ -53,3 +53,6 @@ nb-configuration.xml
 release.properties
 pom.xml.releaseBackup
 pom.xml.tag
+out/artifacts/SyntacticParser_jar/SyntacticParser.jar
+out/production/SyntacticParser/libs/Corpus.jar
+out/production/SyntacticParser/libs/ParseTree.jar
