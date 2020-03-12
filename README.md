@@ -1,4 +1,7 @@
 # SyntacticParser
+
+This tool analyzes the syntactic structure of a sentence by breaking it down into components and establishing the grammatical relations between said components.
+
 For Developers
 ============
 
