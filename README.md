@@ -87,8 +87,8 @@ SyntacticParser
 
 ### Maven Usage
 
-	<dependency>
-  	<groupId>NlpToolkit</groupId>
-  	<artifactId>SyntacticParser</artifactId>
-  	<version>1.0.0</version>
-	</dependency>
+        <dependency>
+            <groupId>io.github.starlangsoftware</groupId>
+            <artifactId>SyntacticParser</artifactId>
+            <version>1.0.0</version>
+        </dependency>
