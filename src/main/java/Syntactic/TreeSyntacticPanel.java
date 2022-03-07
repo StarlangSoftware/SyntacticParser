@@ -6,6 +6,7 @@ import DataCollector.ParseTree.TreeAction.*;
 import DataCollector.ParseTree.TreeStructureEditorPanel;
 import ParseTree.ParseNode;
 import ParseTree.Symbol;
+import Util.RectAngle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,8 +63,8 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
             } else {
                 editText.setText(editableNode.getData().getName());
             }
-            Rectangle rect = editableNode.getArea();
-            editText.setBounds(rect.x - 20, rect.y - 4, rect.width + 40, rect.height + 8);
+            RectAngle rect = editableNode.getArea();
+            editText.setBounds(rect.getX() - 20, rect.getY() - 4, rect.getWidth() + 40, rect.getHeight() + 8);
             editText.setVisible(true);
             editText.requestFocus();
         }
@@ -132,7 +133,7 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         dragged = true;
         if (node != null && node != previousNode && node.numberOfChildren() > 0 && !node.getChild(0).isLeaf() && !fromNode.isDescendant(node)){
             draggedNode = node;
-            draggedIndex = (int) (((draggedNode.numberOfChildren() + 1) * (mouseEvent.getX() - node.getArea().x)) / (node.getArea().width + 0.0));
+            draggedIndex = (int) (((draggedNode.numberOfChildren() + 1) * (mouseEvent.getX() - node.getArea().getX())) / (node.getArea().getWidth() + 0.0));
             draggedNode.setDragged(true, draggedIndex);
             this.repaint();
         } else {
