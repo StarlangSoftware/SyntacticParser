@@ -3,6 +3,7 @@ package ContextFreeGrammar;
 import ParseTree.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ContextFreeGrammar {
@@ -19,7 +20,7 @@ public class ContextFreeGrammar {
         rules = new ArrayList<>();
         rulesRightSorted = new ArrayList<>();
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
             String line = br.readLine();
             while (line != null){
                 rules.add(new Rule(line));
@@ -27,11 +28,18 @@ public class ContextFreeGrammar {
                 line = br.readLine();
             }
             Comparator<Rule> comparator = new RuleComparator();
-            Collections.sort(rules, comparator);
+            rules.sort(comparator);
             Comparator<Rule> rightComparator = new RuleRightSideComparator();
-            Collections.sort(rulesRightSorted, rightComparator);
+            rulesRightSorted.sort(rightComparator);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public ContextFreeGrammar(TreeBank treeBank){
+        for (int i = 0; i < treeBank.size(); i++){
+            ParseTree parseTree = treeBank.get(i);
+            addRules(parseTree.getRoot());
         }
     }
 
@@ -63,7 +71,7 @@ public class ContextFreeGrammar {
         if (newRule != null){
            addRule(newRule);
         } else {
-            System.out.println(toString());
+            System.out.println(this);
         }
         for (int i = 0; i < parseNode.numberOfChildren(); i++) {
             ParseNode childNode = parseNode.getChild(i);
@@ -73,16 +81,9 @@ public class ContextFreeGrammar {
         }
     }
 
-    public ContextFreeGrammar(TreeBank treeBank){
-        for (int i = 0; i < treeBank.size(); i++){
-            ParseTree parseTree = treeBank.get(i);
-            addRules(parseTree.getRoot());
-        }
-    }
-
     public void writeToFile(String fileName){
         try {
-            FileWriter fw = new FileWriter(new File(fileName));
+            FileWriter fw = new FileWriter(fileName);
             for (Rule rule:rules){
                 fw.write(rule.toString() + "\n");
             }
@@ -208,7 +209,7 @@ public class ContextFreeGrammar {
     /*Return terminal rules such as X -> S*/
     public ArrayList<Rule> getRulesWithRightSideX(Symbol S){
         int pos, posUp, posDown;
-        ArrayList<Rule> result = new ArrayList<Rule>();
+        ArrayList<Rule> result = new ArrayList<>();
         Rule dummyRule = new Rule(S, S);
         Comparator<Rule> rightComparator = new RuleRightSideComparator();
         pos = Collections.binarySearch(rulesRightSorted, dummyRule, rightComparator);
@@ -230,7 +231,7 @@ public class ContextFreeGrammar {
     /*Return rules such as X -> AB */
     public ArrayList<Rule> getRulesWithTwoNonTerminalsOnRightSide(Symbol A, Symbol B){
         int pos, posUp, posDown;
-        ArrayList<Rule> result = new ArrayList<Rule>();
+        ArrayList<Rule> result = new ArrayList<>();
         Rule dummyRule = new Rule(A, A, B);
         Comparator<Rule> rightComparator = new RuleRightSideComparator();
         pos = Collections.binarySearch(rulesRightSorted, dummyRule, rightComparator);
@@ -279,7 +280,7 @@ public class ContextFreeGrammar {
         Symbol removeCandidate;
         ArrayList<Rule> ruleList;
         ArrayList<Rule> candidateList;
-        nonTerminalList = new ArrayList<Symbol>();
+        nonTerminalList = new ArrayList<>();
         removeCandidate = getSingleNonTerminalCandidateToRemove(nonTerminalList);
         while (removeCandidate != null){
             ruleList = getRulesWithRightSideX(removeCandidate);
@@ -314,7 +315,7 @@ public class ContextFreeGrammar {
         int newVariableCount = 0;
         updateCandidate = getMultipleNonTerminalCandidateToUpdate();
         while (updateCandidate != null){
-            ArrayList<Symbol> newRightHandSide = new ArrayList<Symbol>();
+            ArrayList<Symbol> newRightHandSide = new ArrayList<>();
             Symbol newSymbol = new Symbol("X" + newVariableCount);
             newRightHandSide.add(updateCandidate.getRightHandSide().get(0));
             newRightHandSide.add(updateCandidate.getRightHandSide().get(1));
@@ -330,9 +331,9 @@ public class ContextFreeGrammar {
         removeSingleNonTerminalFromRightHandSide();
         updateMultipleNonTerminalFromRightHandSide();
         Comparator<Rule> comparator = new RuleComparator();
-        Collections.sort(rules, comparator);
+        rules.sort(comparator);
         Comparator<Rule> rightComparator = new RuleRightSideComparator();
-        Collections.sort(rulesRightSorted, rightComparator);
+        rulesRightSorted.sort(rightComparator);
     }
 
     public Rule searchRule(Rule rule){
