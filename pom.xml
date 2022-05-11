@@ -6,7 +6,7 @@
 
     <groupId>io.github.starlangsoftware</groupId>
     <artifactId>SyntacticParser</artifactId>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
     <packaging>jar</packaging>
 
     <name>NlpToolkit.SyntacticParser</name>
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>io.github.starlangsoftware</groupId>
             <artifactId>DataCollector</artifactId>
-            <version>1.0.48</version>
+            <version>1.0.49</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
