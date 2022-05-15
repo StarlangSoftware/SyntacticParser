@@ -6,17 +6,14 @@ import ParseTree.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
 
     public ProbabilisticContextFreeGrammar(){
-
     }
 
     public ProbabilisticContextFreeGrammar(String fileName){
-        rules = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
             String line = br.readLine();
@@ -34,12 +31,14 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
         }
     }
 
-    public ProbabilisticContextFreeGrammar(TreeBank treeBank){
+    public ProbabilisticContextFreeGrammar(TreeBank treeBank, int minCount){
         ArrayList<Symbol> variables;
         ArrayList<Rule> candidates;
         int total;
+        constructDictionary(treeBank);
         for (int i = 0; i < treeBank.size(); i++){
             ParseTree parseTree = treeBank.get(i);
+            updateTree(parseTree, minCount);
             addRules(parseTree.getRoot());
         }
         variables = getLeftSide();

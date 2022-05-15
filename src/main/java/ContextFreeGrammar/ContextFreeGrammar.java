@@ -1,24 +1,24 @@
 package ContextFreeGrammar;
 
+import DataStructure.CounterHashMap;
 import ParseTree.*;
+import ParseTree.NodeCondition.IsLeaf;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class ContextFreeGrammar {
 
-    protected ArrayList<Rule> rules;
-    protected ArrayList<Rule> rulesRightSorted;
+    protected CounterHashMap<String> dictionary = new CounterHashMap<>();
+    protected ArrayList<Rule> rules = new ArrayList<>();
+    protected ArrayList<Rule> rulesRightSorted = new ArrayList<>();
 
     public ContextFreeGrammar(){
-        rules = new ArrayList<>();
-        rulesRightSorted = new ArrayList<>();
     }
 
     public ContextFreeGrammar(String fileName){
-        rules = new ArrayList<>();
-        rulesRightSorted = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
             String line = br.readLine();
@@ -36,9 +36,39 @@ public class ContextFreeGrammar {
         }
     }
 
-    public ContextFreeGrammar(TreeBank treeBank){
+    protected void constructDictionary(TreeBank treeBank){
         for (int i = 0; i < treeBank.size(); i++){
             ParseTree parseTree = treeBank.get(i);
+            NodeCollector nodeCollector = new NodeCollector(parseTree.getRoot(), new IsLeaf());
+            ArrayList<ParseNode> leafList = nodeCollector.collect();
+            for (ParseNode parseNode : leafList){
+                dictionary.put(parseNode.getData().getName());
+            }
+        }
+    }
+
+    public void updateTree(ParseTree parseTree, int minCount){
+        NodeCollector nodeCollector = new NodeCollector(parseTree.getRoot(), new IsLeaf());
+        ArrayList<ParseNode> leafList = nodeCollector.collect();
+        Pattern pattern1 = Pattern.compile("\\+?\\d+");
+        Pattern pattern2 = Pattern.compile("\\+?(\\d+)?\\.\\d*");
+        for (ParseNode parseNode : leafList){
+            String data = parseNode.getData().getName();
+            if (pattern1.matcher(data).matches() || (pattern2.matcher(data).matches() && !data.equals("."))){
+                parseNode.setData(new Symbol("*NUM*"));
+            } else {
+                if (dictionary.count(data) < minCount){
+                    parseNode.setData(new Symbol("*RARE*"));
+                }
+            }
+        }
+    }
+
+    public ContextFreeGrammar(TreeBank treeBank, int minCount){
+        constructDictionary(treeBank);
+        for (int i = 0; i < treeBank.size(); i++){
+            ParseTree parseTree = treeBank.get(i);
+            updateTree(parseTree, minCount);
             addRules(parseTree.getRoot());
         }
     }
