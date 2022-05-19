@@ -117,6 +117,13 @@ public class ContextFreeGrammar {
             for (Rule rule:rules){
                 fw.write(rule.toString() + "\n");
             }
+            String dictionaryKeyString = "", dictionaryValueString = "";
+            for (Map.Entry<String, Integer> set : dictionary.entrySet()) {
+                dictionaryKeyString = dictionaryKeyString + " " + set.getKey();
+                dictionaryValueString = dictionaryValueString + " " + set.getValue();
+            }
+            fw.write("dictionary_keys:" + dictionaryKeyString.substring(1) + "\n");
+            fw.write("dictionary_values:" + dictionaryValueString.substring(1) + "\n");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
