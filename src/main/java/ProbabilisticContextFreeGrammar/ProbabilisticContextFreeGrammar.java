@@ -5,8 +5,7 @@ import ParseTree.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
 
@@ -17,10 +16,20 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
             String line = br.readLine();
+            List<String> dictionaryStringKeySplitted = null, dictionaryStringValueSplitted = null;
             while (line != null){
-                rules.add(new ProbabilisticRule(line));
-                rulesRightSorted.add(new ProbabilisticRule(line));
+                if (line.startsWith("dictionary_keys:")){
+                    dictionaryStringKeySplitted = Arrays.asList(line.substring(16).split("\\s+"));
+                }else if (line.startsWith("dictionary_values:")){
+                    dictionaryStringValueSplitted = Arrays.asList(line.substring(18).split("\\s+"));
+                } else {
+                    rules.add(new ProbabilisticRule(line));
+                    rulesRightSorted.add(new ProbabilisticRule(line));
+                }
                 line = br.readLine();
+            }
+            for (int i = 0; i < dictionaryStringKeySplitted.size(); i++){
+                dictionary.put(dictionaryStringKeySplitted.get(i), Integer.valueOf(dictionaryStringValueSplitted.get(i)));
             }
             Comparator<Rule> comparator = new RuleComparator();
             rules.sort(comparator);
@@ -127,6 +136,13 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
             for (Rule rule:rules){
                 fw.write(rule.toString() + "\n");
             }
+            String dictionaryKeyString = "", dictionaryValueString = "";
+            for (Map.Entry<String, Integer> set : dictionary.entrySet()) {
+                dictionaryKeyString = dictionaryKeyString + " " + set.getKey();
+                dictionaryValueString = dictionaryValueString + " " + set.getValue();
+            }
+            fw.write("dictionary_keys:" + dictionaryKeyString.substring(1) + "\n");
+            fw.write("dictionary_values:" + dictionaryValueString.substring(1) + "\n");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
