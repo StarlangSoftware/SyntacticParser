@@ -55,10 +55,10 @@ public class ContextFreeGrammar {
         for (ParseNode parseNode : leafList){
             String data = parseNode.getData().getName();
             if (pattern1.matcher(data).matches() || (pattern2.matcher(data).matches() && !data.equals("."))){
-                parseNode.setData(new Symbol("*NUM*"));
+                parseNode.setData(new Symbol("NUM"));
             } else {
                 if (dictionary.count(data) < minCount){
-                    parseNode.setData(new Symbol("*RARE*"));
+                    parseNode.setData(new Symbol("RARE"));
                 }
             }
         }
