@@ -1,0 +1,103 @@
+, ->  ,
+. ->  .
+ADJP ->  ADJP ADJP
+ADJP ->  ADVP ADJP
+ADJP ->  Büyük
+ADJP ->  farklı
+ADJP ->  gelecek
+ADJP ->  geç
+ADJP ->  hızlı
+ADJP ->  karmaşık
+ADJP ->  yeni
+ADVP ->  ADJP NP
+ADVP ->  ADVP ADJP
+ADVP ->  ADVP CONJP
+ADVP ->  daha
+ADVP ->  kesinlikle
+ADVP ->  yarayıp
+ADVP ->  çok
+ADVP ->  çoktan
+ADVP ->  önce
+CONJP ->  da
+CONJP ->  ve
+DP ->  Bu
+DP ->  bir
+DP ->  birkaç
+NOMP ->  ADVP NOMP
+NOMP ->  NP NOMP
+NOMP ->  hazırdı
+NOMP ->  zorundaydık
+NOMP ->  önemlidir
+NP ->  ADJP NP
+NP ->  Araçlar
+NP ->  Biz
+NP ->  Bu
+NP ->  Bunu
+NP ->  Cuma
+NP ->  DP ADJP NP NP
+NP ->  DP NP
+NP ->  Fidelity
+NP ->  Hutton
+NP ->  Komitesi
+NP ->  Lehman
+NP ->  NP ADVP NP
+NP ->  NP CONJP NP
+NP ->  NP NP
+NP ->  NP NP NP NP
+NP ->  NP PP NP
+NP ->  PP NP
+NP ->  Salı
+NP ->  Shearson
+NP ->  Yollar
+NP ->  adıyla
+NP ->  devam
+NP ->  dil
+NP ->  diyaloğu
+NP ->  duruşma
+NP ->  dün
+NP ->  düşünmek
+NP ->  fatura
+NP ->  firmalar
+NP ->  fonu
+NP ->  görmek
+NP ->  günü
+NP ->  hareket
+NP ->  işe
+NP ->  kez
+NP ->  onlar
+NP ->  reklamlarını
+NP ->  reklamın
+NP ->  reklamını
+NP ->  sabaha
+NP ->  savaşı
+NP ->  sürdürmek
+NP ->  televizyon
+NP ->  vaktinden
+NP ->  yapmaya
+NP ->  yaramadığını
+NP ->  yasada
+NP ->  Şirketi
+PP ->  NP ADVP
+PP ->  NP PP
+PP ->  için
+PP ->  kadar
+S ->  NOMP .
+S ->  NP , NP VP .
+S ->  NP NOMP .
+S ->  NP NP
+S ->  NP NP NOMP .
+S ->  NP VP .
+S ->  VP .
+VP ->  ADVP NP VP
+VP ->  ADVP VP
+VP ->  NP VP
+VP ->  PP ADJP VP
+VP ->  PP ADVP VP
+VP ->  S NP VP
+VP ->  bulandırmıştır
+VP ->  eder
+VP ->  ediyor
+VP ->  olacaktı
+VP ->  yapacak
+VP ->  yazmıştı
+VP ->  üzereyiz

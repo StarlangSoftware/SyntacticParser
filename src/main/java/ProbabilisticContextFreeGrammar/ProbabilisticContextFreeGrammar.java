@@ -12,24 +12,14 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
     public ProbabilisticContextFreeGrammar(){
     }
 
-    public ProbabilisticContextFreeGrammar(String fileName){
+    public ProbabilisticContextFreeGrammar(String ruleFileName, String dictionaryFileName){
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(ruleFileName), StandardCharsets.UTF_8));
             String line = br.readLine();
-            List<String> dictionaryStringKeySplitted = null, dictionaryStringValueSplitted = null;
             while (line != null){
-                if (line.startsWith("dictionary_keys:")){
-                    dictionaryStringKeySplitted = Arrays.asList(line.substring(16).split("\\s+"));
-                }else if (line.startsWith("dictionary_values:")){
-                    dictionaryStringValueSplitted = Arrays.asList(line.substring(18).split("\\s+"));
-                } else {
-                    rules.add(new ProbabilisticRule(line));
-                    rulesRightSorted.add(new ProbabilisticRule(line));
-                }
+                rules.add(new ProbabilisticRule(line));
+                rulesRightSorted.add(new ProbabilisticRule(line));
                 line = br.readLine();
-            }
-            for (int i = 0; i < dictionaryStringKeySplitted.size(); i++){
-                dictionary.put(dictionaryStringKeySplitted.get(i), Integer.valueOf(dictionaryStringValueSplitted.get(i)));
             }
             Comparator<Rule> comparator = new RuleComparator();
             rules.sort(comparator);
@@ -38,6 +28,7 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        readDictionary(dictionaryFileName);
     }
 
     public ProbabilisticContextFreeGrammar(TreeBank treeBank, int minCount){

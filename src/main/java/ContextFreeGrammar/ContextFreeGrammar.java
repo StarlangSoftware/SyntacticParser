@@ -18,9 +18,23 @@ public class ContextFreeGrammar {
     public ContextFreeGrammar(){
     }
 
-    public ContextFreeGrammar(String fileName){
+    protected void readDictionary(String dictionaryFileName){
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(dictionaryFileName), StandardCharsets.UTF_8));
+            String line = br.readLine();
+            while (line != null){
+                String[] items = line.split(" ");
+                dictionary.putNTimes(items[0], Integer.parseInt(items[1]));
+                line = br.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ContextFreeGrammar(String ruleFileName, String dictionaryFileName){
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(ruleFileName), StandardCharsets.UTF_8));
             String line = br.readLine();
             while (line != null){
                 rules.add(new Rule(line));
@@ -34,6 +48,7 @@ public class ContextFreeGrammar {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        readDictionary(dictionaryFileName);
     }
 
     protected void constructDictionary(TreeBank treeBank){
@@ -111,23 +126,21 @@ public class ContextFreeGrammar {
         }
     }
 
-    public void writeToFile(String fileName){
+    public void writeToFile(String ruleFileName, String dictionaryFileName){
         try {
-            FileWriter fw = new FileWriter(fileName);
-            FileWriter fww = new FileWriter(fileName+"_dictionary");
-            for (Rule rule:rules){
-                fw.write(rule.toString() + "\n");
+            FileWriter ruleWriter = new FileWriter(ruleFileName);
+            FileWriter dictionaryWriter = new FileWriter(dictionaryFileName);
+            for (Rule rule : rules){
+                ruleWriter.write(rule.toString() + "\n");
             }
             String dictionaryKeyString = "", dictionaryValueString = "";
             for (Map.Entry<String, Integer> set : dictionary.entrySet()) {
-                fww.write(set.getKey() + " -> " + set.getValue() + "\n");
+                dictionaryWriter.write(set.getKey() + " " + set.getValue() + "\n");
                 dictionaryKeyString = dictionaryKeyString + " " + set.getKey();
                 dictionaryValueString = dictionaryValueString + " " + set.getValue();
             }
-            fw.write("dictionary_keys:" + dictionaryKeyString.substring(1) + "\n");
-            fw.write("dictionary_values:" + dictionaryValueString.substring(1) + "\n");
-            fw.close();
-            fww.close();
+            ruleWriter.close();
+            dictionaryWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
