@@ -29,6 +29,7 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
             e.printStackTrace();
         }
         readDictionary(dictionaryFileName);
+        updateTypes();
     }
 
     public ProbabilisticContextFreeGrammar(TreeBank treeBank, int minCount){
@@ -52,6 +53,7 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
                 ((ProbabilisticRule) candidate).normalizeProbability(total);
             }
         }
+        updateTypes();
     }
 
     public static ProbabilisticRule toRule(ParseNode parseNode, boolean trim){
@@ -140,7 +142,6 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
             }
             nonTerminalList.add(removeCandidate);
             removeCandidate = getSingleNonTerminalCandidateToRemove(nonTerminalList);
-            System.out.println(rules.size());
         }
     }
 
@@ -157,7 +158,6 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
             addRule(new ProbabilisticRule(newSymbol, newRightHandSide, RuleType.TWO_NON_TERMINAL, 1.0));
             newVariableCount++;
             updateCandidate = getMultipleNonTerminalCandidateToUpdate();
-            System.out.println(rules.size());
         }
     }
 

@@ -49,6 +49,17 @@ public class ContextFreeGrammar {
             e.printStackTrace();
         }
         readDictionary(dictionaryFileName);
+        updateTypes();
+    }
+
+    public ContextFreeGrammar(TreeBank treeBank, int minCount){
+        constructDictionary(treeBank);
+        for (int i = 0; i < treeBank.size(); i++){
+            ParseTree parseTree = treeBank.get(i);
+            updateTree(parseTree, minCount);
+            addRules(parseTree.getRoot());
+        }
+        updateTypes();
     }
 
     protected void constructDictionary(TreeBank treeBank){
@@ -79,12 +90,25 @@ public class ContextFreeGrammar {
         }
     }
 
-    public ContextFreeGrammar(TreeBank treeBank, int minCount){
-        constructDictionary(treeBank);
-        for (int i = 0; i < treeBank.size(); i++){
-            ParseTree parseTree = treeBank.get(i);
-            updateTree(parseTree, minCount);
-            addRules(parseTree.getRoot());
+    protected void updateTypes(){
+        HashSet<String> nonTerminals = new HashSet<>();
+        for (Rule rule: rules){
+            nonTerminals.add(rule.leftHandSide.getName());
+        }
+        for (Rule rule : rules){
+            if (rule.rightHandSide.size() > 2){
+                rule.type = RuleType.MULTIPLE_NON_TERMINAL;
+            } else {
+                if (rule.rightHandSide.size() == 2){
+                    rule.type = RuleType.TWO_NON_TERMINAL;
+                } else {
+                    if (!nonTerminals.contains(rule.rightHandSide.get(0).getName())){
+                        rule.type = RuleType.TERMINAL;
+                    } else {
+                        rule.type = RuleType.SINGLE_NON_TERMINAL;
+                    }
+                }
+            }
         }
     }
 

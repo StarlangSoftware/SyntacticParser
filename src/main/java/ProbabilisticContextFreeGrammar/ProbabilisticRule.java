@@ -31,7 +31,6 @@ public class ProbabilisticRule extends Rule {
             rightHandSide.add(new Symbol(rightSide[i]));
         }
         probability = Double.parseDouble(prob);
-        updateType();
     }
 
     public double getProbability(){

@@ -17,7 +17,6 @@ public class Rule {
         this.leftHandSide = leftHandSide;
         this.rightHandSide = new ArrayList<Symbol>();
         this.rightHandSide.add(rightHandSideSymbol);
-        updateType();
     }
 
     public Rule(Symbol leftHandSide, Symbol rightHandSideSymbol1, Symbol rightHandSideSymbol2){
@@ -25,13 +24,11 @@ public class Rule {
         this.rightHandSide = new ArrayList<Symbol>();
         this.rightHandSide.add(rightHandSideSymbol1);
         this.rightHandSide.add(rightHandSideSymbol2);
-        updateType();
     }
 
     public Rule(Symbol leftHandSide, ArrayList<Symbol> rightHandSide){
         this.leftHandSide = leftHandSide;
         this.rightHandSide = rightHandSide;
-        updateType();
     }
 
     public Rule(Symbol leftHandSide, ArrayList<Symbol> rightHandSide, RuleType type){
@@ -50,7 +47,6 @@ public class Rule {
         for (i = 0; i < rightSide.length; i++){
             rightHandSide.add(new Symbol(rightSide[i]));
         }
-        updateType();
     }
 
     @Override public boolean equals(Object aThat) {
@@ -64,22 +60,6 @@ public class Rule {
 
     public boolean leftRecursive(){
         return rightHandSide.get(0).equals(leftHandSide) && rightHandSide.size() == 1;
-    }
-
-    protected void updateType(){
-        if (rightHandSide.size() > 2){
-            type = RuleType.MULTIPLE_NON_TERMINAL;
-        } else {
-            if (rightHandSide.size() == 2){
-                type = RuleType.TWO_NON_TERMINAL;
-            } else {
-                if (rightHandSide.get(0).isTerminal()){
-                    type = RuleType.TERMINAL;
-                } else {
-                    type = RuleType.SINGLE_NON_TERMINAL;
-                }
-            }
-        }
     }
 
     protected boolean updateMultipleNonTerminal(Symbol first, Symbol second, Symbol with){
