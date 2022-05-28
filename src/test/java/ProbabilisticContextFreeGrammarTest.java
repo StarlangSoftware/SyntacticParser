@@ -30,11 +30,13 @@ public class ProbabilisticContextFreeGrammarTest {
         pcfg.convertToChomskyNormalForm();
         Sentence sentence = new Sentence("yeni Büyük yasada karmaşık dil savaşı bulandırmıştır .");
         ArrayList<ParseTree> parses1 = probabilisticCYKParser.parse(pcfg, sentence);
+        assertEquals(parses1.size(), 1);
         TreeBank treeBank2 = new TreeBank(new File("trees2"));
         ProbabilisticContextFreeGrammar pcfg2 = new ProbabilisticContextFreeGrammar(treeBank2, 1);
         pcfg2.convertToChomskyNormalForm();
         Sentence sentence2 = new Sentence("yeni büyük yasa karmaşık dil savaş bulan .");
         ArrayList<ParseTree> parses2 = probabilisticCYKParser.parse(pcfg2, sentence2);
+        assertEquals(parses2.size(), 1);
     }
 
 }

@@ -2,6 +2,7 @@ package SyntacticParser;
 
 import ContextFreeGrammar.*;
 import Corpus.Sentence;
+import Dictionary.Word;
 import ParseTree.*;
 
 import java.util.ArrayList;
@@ -10,11 +11,15 @@ public class CYKParser implements SyntacticParser{
 
     public ArrayList<ParseTree> parse(ContextFreeGrammar cfg, Sentence sentence) {
         int i, j, k, x, y;
-        long start, end;
         PartialParseList table[][];
         ParseNode leftNode, rightNode;
         ArrayList<Rule> candidates;
         ArrayList<ParseTree> parseTrees = new ArrayList<ParseTree>();
+        Sentence backUp = new Sentence();
+        for (i = 0; i < sentence.wordCount(); i++){
+            backUp.addWord(new Word(sentence.getWord(i).getName()));
+        }
+        cfg.removeExceptionalWordsFromSentence(sentence);
         table = new PartialParseList[sentence.wordCount()][sentence.wordCount()];
         for (i = 0; i < sentence.wordCount(); i++)
             for (j = i; j < sentence.wordCount(); j++)
@@ -26,7 +31,6 @@ public class CYKParser implements SyntacticParser{
             }
         }
         for (j = 1; j < sentence.wordCount(); j++){
-            start = System.currentTimeMillis();
             for (i = j - 1; i >= 0; i--)
                 for (k = i; k < j; k++){
                     for (x = 0; x < table[i][k].size(); x++)
@@ -39,8 +43,6 @@ public class CYKParser implements SyntacticParser{
                             }
                         }
                 }
-            end = System.currentTimeMillis();
-            System.out.println("Word " + j + " completed in " + (end - start) + " milliseconds");
         }
         for (i = 0; i < table[0][sentence.wordCount() - 1].size(); i++){
             if (table[0][sentence.wordCount() - 1].getPartialParse(i).getData().getName().equals("S")) {
@@ -49,6 +51,9 @@ public class CYKParser implements SyntacticParser{
                 parseTree.removeXNodes();
                 parseTrees.add(parseTree);
             }
+        }
+        for (ParseTree parseTree : parseTrees){
+            cfg.reinsertExceptionalWordsFromSentence(parseTree, backUp);
         }
         return parseTrees;
     }

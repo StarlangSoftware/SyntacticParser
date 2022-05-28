@@ -1,5 +1,6 @@
 package ContextFreeGrammar;
 
+import Corpus.Sentence;
 import DataStructure.CounterHashMap;
 import ParseTree.*;
 import ParseTree.NodeCondition.IsLeaf;
@@ -15,6 +16,7 @@ public class ContextFreeGrammar {
     protected CounterHashMap<String> dictionary = new CounterHashMap<>();
     protected ArrayList<Rule> rules = new ArrayList<>();
     protected ArrayList<Rule> rulesRightSorted = new ArrayList<>();
+    protected int minCount = 1;
 
     public ContextFreeGrammar(){
     }
@@ -61,6 +63,7 @@ public class ContextFreeGrammar {
             addRules(parseTree.getRoot());
         }
         updateTypes();
+        this.minCount = minCount;
     }
 
     protected void constructDictionary(TreeBank treeBank){
@@ -87,6 +90,33 @@ public class ContextFreeGrammar {
                 if (dictionary.count(data) < minCount){
                     parseNode.setData(new Symbol("_rare_"));
                 }
+            }
+        }
+    }
+
+    public void removeExceptionalWordsFromSentence(Sentence sentence){
+        Pattern pattern1 = Pattern.compile("\\+?\\d+");
+        Pattern pattern2 = Pattern.compile("\\+?(\\d+)?\\.\\d*");
+        for (int i = 0; i < sentence.wordCount(); i++){
+            Word word = sentence.getWord(i);
+            if (pattern1.matcher(word.getName()).matches() || (pattern2.matcher(word.getName()).matches() && !word.getName().equals("."))){
+                word.setName("_num_");
+            } else {
+                if (dictionary.count(word.getName()) < minCount){
+                    word.setName("_rare_");
+                }
+            }
+        }
+    }
+
+    public void reinsertExceptionalWordsFromSentence(ParseTree parseTree, Sentence sentence){
+        NodeCollector nodeCollector = new NodeCollector(parseTree.getRoot(), new IsLeaf());
+        ArrayList<ParseNode> leafList = nodeCollector.collect();
+        for (int i = 0; i < leafList.size(); i++){
+            String treeWord = leafList.get(i).getData().getName();
+            String sentenceWord = sentence.getWord(i).getName();
+            if (treeWord.equals("_rare_") || treeWord.equals("_num_")){
+                leafList.get(i).setData(new Symbol(sentenceWord));
             }
         }
     }

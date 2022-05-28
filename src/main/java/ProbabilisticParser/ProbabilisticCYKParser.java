@@ -2,6 +2,7 @@ package ProbabilisticParser;
 
 import ContextFreeGrammar.*;
 import Corpus.Sentence;
+import Dictionary.Word;
 import ParseTree.*;
 import ProbabilisticContextFreeGrammar.*;
 import SyntacticParser.PartialParseList;
@@ -16,6 +17,11 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
         double bestProbability, probability;
         ArrayList<Rule> candidates;
         ArrayList<ParseTree> parseTrees = new ArrayList<ParseTree>();
+        Sentence backUp = new Sentence();
+        for (i = 0; i < sentence.wordCount(); i++){
+            backUp.addWord(new Word(sentence.getWord(i).getName()));
+        }
+        pCfg.removeExceptionalWordsFromSentence(sentence);
         table = new PartialParseList[sentence.wordCount()][sentence.wordCount()];
         for (i = 0; i < sentence.wordCount(); i++)
             for (j = i; j < sentence.wordCount(); j++)
@@ -54,6 +60,9 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
                 parseTree.removeXNodes();
                 parseTrees.add(parseTree);
             }
+        }
+        for (ParseTree parseTree : parseTrees){
+            pCfg.reinsertExceptionalWordsFromSentence(parseTree, backUp);
         }
         return parseTrees;
     }

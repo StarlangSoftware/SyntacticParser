@@ -54,6 +54,7 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
             }
         }
         updateTypes();
+        this.minCount = minCount;
     }
 
     public static ProbabilisticRule toRule(ParseNode parseNode, boolean trim){
