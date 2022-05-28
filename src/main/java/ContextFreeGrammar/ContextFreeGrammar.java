@@ -412,11 +412,6 @@ public class ContextFreeGrammar {
                 rule.updateMultipleNonTerminal(first, second, with);
             }
         }
-        for (Rule rule : rulesRightSorted) {
-            if (rule.type == RuleType.MULTIPLE_NON_TERMINAL) {
-                rule.updateMultipleNonTerminal(first, second, with);
-            }
-        }
     }
 
     private void updateMultipleNonTerminalFromRightHandSide(){
