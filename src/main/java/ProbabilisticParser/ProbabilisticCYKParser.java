@@ -11,7 +11,6 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
 
     public ArrayList<ParseTree> parse(ProbabilisticContextFreeGrammar pCfg, Sentence sentence) {
         int i, j, k, x, y;
-        long start, end;
         PartialParseList table[][];
         ProbabilisticParseNode leftNode, rightNode;
         double bestProbability, probability;
@@ -28,7 +27,6 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
             }
         }
         for (j = 1; j < sentence.wordCount(); j++){
-            start = System.currentTimeMillis();
             for (i = j - 1; i >= 0; i--){
                 for (k = i; k < j; k++)
                     for (x = 0; x < table[i][k].size(); x++)
@@ -42,8 +40,6 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
                             }
                         }
             }
-            end = System.currentTimeMillis();
-            System.out.println("Word " + j + " completed in " + (end - start) + " milliseconds");
         }
         bestProbability = -Double.MAX_VALUE;
         for (i = 0; i < table[0][sentence.wordCount() - 1].size(); i++){
