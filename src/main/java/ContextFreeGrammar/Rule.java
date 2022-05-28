@@ -59,7 +59,7 @@ public class Rule {
     }
 
     public boolean leftRecursive(){
-        return rightHandSide.get(0).equals(leftHandSide) && rightHandSide.size() == 1;
+        return rightHandSide.get(0).equals(leftHandSide) && type == RuleType.SINGLE_NON_TERMINAL;
     }
 
     protected boolean updateMultipleNonTerminal(Symbol first, Symbol second, Symbol with){
