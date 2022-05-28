@@ -3,6 +3,7 @@ package ContextFreeGrammar;
 import DataStructure.CounterHashMap;
 import ParseTree.*;
 import ParseTree.NodeCondition.IsLeaf;
+import Dictionary.Word;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -102,7 +103,7 @@ public class ContextFreeGrammar {
                 if (rule.rightHandSide.size() == 2){
                     rule.type = RuleType.TWO_NON_TERMINAL;
                 } else {
-                    if (!nonTerminals.contains(rule.rightHandSide.get(0).getName())){
+                    if (rule.rightHandSide.get(0).isTerminal() || Word.isPunctuation(rule.rightHandSide.get(0).getName()) || !nonTerminals.contains(rule.rightHandSide.get(0).getName())){
                         rule.type = RuleType.TERMINAL;
                     } else {
                         rule.type = RuleType.SINGLE_NON_TERMINAL;
@@ -370,7 +371,6 @@ public class ContextFreeGrammar {
             }
             nonTerminalList.add(removeCandidate);
             removeCandidate = getSingleNonTerminalCandidateToRemove(nonTerminalList);
-            System.out.println(rules.size());
         }
     }
 
@@ -400,7 +400,6 @@ public class ContextFreeGrammar {
             addRule(new Rule(newSymbol, newRightHandSide, RuleType.TWO_NON_TERMINAL));
             updateCandidate = getMultipleNonTerminalCandidateToUpdate();
             newVariableCount++;
-            System.out.println(rules.size());
         }
     }
 
