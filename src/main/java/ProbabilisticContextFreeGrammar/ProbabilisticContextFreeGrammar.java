@@ -12,13 +12,14 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
     public ProbabilisticContextFreeGrammar(){
     }
 
-    public ProbabilisticContextFreeGrammar(String ruleFileName, String dictionaryFileName){
+    public ProbabilisticContextFreeGrammar(String ruleFileName, String dictionaryFileName, int minCount){
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(ruleFileName), StandardCharsets.UTF_8));
             String line = br.readLine();
             while (line != null){
-                rules.add(new ProbabilisticRule(line));
-                rulesRightSorted.add(new ProbabilisticRule(line));
+                ProbabilisticRule newRule = new ProbabilisticRule(line);
+                rules.add(newRule);
+                rulesRightSorted.add(newRule);
                 line = br.readLine();
             }
             Comparator<Rule> comparator = new RuleComparator();
@@ -30,6 +31,7 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
         }
         readDictionary(dictionaryFileName);
         updateTypes();
+        this.minCount = minCount;
     }
 
     public ProbabilisticContextFreeGrammar(TreeBank treeBank, int minCount){

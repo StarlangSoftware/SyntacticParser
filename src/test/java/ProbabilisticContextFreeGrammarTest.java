@@ -16,7 +16,7 @@ public class ProbabilisticContextFreeGrammarTest {
     public void testPCFG() {
         TreeBank treeBank = new TreeBank(new File("trees"));
         ProbabilisticContextFreeGrammar pcfg = new ProbabilisticContextFreeGrammar(treeBank, 1);
-        ProbabilisticContextFreeGrammar pcfg2 = new ProbabilisticContextFreeGrammar("rule-pcfg.txt", "dictionary-pcfg.txt");
+        ProbabilisticContextFreeGrammar pcfg2 = new ProbabilisticContextFreeGrammar("rule-pcfg.txt", "dictionary-pcfg.txt", 1);
         assertEquals(pcfg.size(), pcfg2.size());
         TreeBank treeBank2 = new TreeBank(new File("trees2"));
         ProbabilisticContextFreeGrammar pcfg3 = new ProbabilisticContextFreeGrammar(treeBank2, 1);
@@ -33,6 +33,21 @@ public class ProbabilisticContextFreeGrammarTest {
         assertEquals(parses1.size(), 1);
         TreeBank treeBank2 = new TreeBank(new File("trees2"));
         ProbabilisticContextFreeGrammar pcfg2 = new ProbabilisticContextFreeGrammar(treeBank2, 1);
+        pcfg2.convertToChomskyNormalForm();
+        Sentence sentence2 = new Sentence("yeni büyük yasa karmaşık dil savaş bulan .");
+        ArrayList<ParseTree> parses2 = probabilisticCYKParser.parse(pcfg2, sentence2);
+        assertEquals(parses2.size(), 1);
+    }
+
+    @Test
+    public void testPCFGParserFromFile() {
+        ProbabilisticCYKParser probabilisticCYKParser = new ProbabilisticCYKParser();
+        ProbabilisticContextFreeGrammar pcfg = new ProbabilisticContextFreeGrammar("rule-pcfg.txt", "dictionary-pcfg.txt", 1);
+        pcfg.convertToChomskyNormalForm();
+        Sentence sentence = new Sentence("yeni Büyük yasada karmaşık dil savaşı bulandırmıştır .");
+        ArrayList<ParseTree> parses1 = probabilisticCYKParser.parse(pcfg, sentence);
+        assertEquals(parses1.size(), 1);
+        ProbabilisticContextFreeGrammar pcfg2 = new ProbabilisticContextFreeGrammar("rule-pcfg2.txt", "dictionary-pcfg2.txt", 1);
         pcfg2.convertToChomskyNormalForm();
         Sentence sentence2 = new Sentence("yeni büyük yasa karmaşık dil savaş bulan .");
         ArrayList<ParseTree> parses2 = probabilisticCYKParser.parse(pcfg2, sentence2);

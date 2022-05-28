@@ -35,13 +35,14 @@ public class ContextFreeGrammar {
         }
     }
 
-    public ContextFreeGrammar(String ruleFileName, String dictionaryFileName){
+    public ContextFreeGrammar(String ruleFileName, String dictionaryFileName, int minCount){
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(ruleFileName), StandardCharsets.UTF_8));
             String line = br.readLine();
             while (line != null){
-                rules.add(new Rule(line));
-                rulesRightSorted.add(new Rule(line));
+                Rule newRule = new Rule(line);
+                rules.add(newRule);
+                rulesRightSorted.add(newRule);
                 line = br.readLine();
             }
             Comparator<Rule> comparator = new RuleComparator();
@@ -53,6 +54,7 @@ public class ContextFreeGrammar {
         }
         readDictionary(dictionaryFileName);
         updateTypes();
+        this.minCount = minCount;
     }
 
     public ContextFreeGrammar(TreeBank treeBank, int minCount){
