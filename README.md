@@ -2,6 +2,11 @@
 
 This tool analyzes the syntactic structure of a sentence by breaking it down into components and establishing the grammatical relations between said components.
 
+Video Lectures
+============
+
+[<img src=video1.jpg width="50%">](https://youtu.be/4erjWXDlJRI)
+
 For Developers
 ============
 
