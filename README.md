@@ -5,7 +5,7 @@ This tool analyzes the syntactic structure of a sentence by breaking it down int
 Video Lectures
 ============
 
-[<img src=video1.jpg width="50%">](https://youtu.be/4erjWXDlJRI)[<img src=video2.jpg width="50%">](https://youtu.be/XwmCs21kosU)
+[<img src=video1.jpg width="50%">](https://youtu.be/4erjWXDlJRI)[<img src=video2.jpg width="50%">](https://youtu.be/XwmCs21kosU)[<img src=video3.jpg width="50%">](https://youtu.be/2pWtrpLGYTA)
 
 For Developers
 ============
