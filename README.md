@@ -7,6 +7,11 @@ Video Lectures
 
 [<img src=video1.jpg width="50%">](https://youtu.be/4erjWXDlJRI)[<img src=video2.jpg width="50%">](https://youtu.be/XwmCs21kosU)[<img src=video3.jpg width="50%">](https://youtu.be/2pWtrpLGYTA)[<img src=video4.jpg width="50%">](https://youtu.be/ajF3p1p6yMM)
 
+Class Diagram
+============
+
+<img src="classDiagram.png">
+
 For Developers
 ============
 
