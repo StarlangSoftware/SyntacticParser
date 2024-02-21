@@ -20,9 +20,7 @@ public class Rule {
     }
 
     public Rule(Symbol leftHandSide, Symbol rightHandSideSymbol1, Symbol rightHandSideSymbol2){
-        this.leftHandSide = leftHandSide;
-        this.rightHandSide = new ArrayList<Symbol>();
-        this.rightHandSide.add(rightHandSideSymbol1);
+        this(leftHandSide, rightHandSideSymbol1);
         this.rightHandSide.add(rightHandSideSymbol2);
     }
 
@@ -32,8 +30,7 @@ public class Rule {
     }
 
     public Rule(Symbol leftHandSide, ArrayList<Symbol> rightHandSide, RuleType type){
-        this.leftHandSide = leftHandSide;
-        this.rightHandSide = rightHandSide;
+        this(leftHandSide, rightHandSide);
         this.type = type;
     }
 

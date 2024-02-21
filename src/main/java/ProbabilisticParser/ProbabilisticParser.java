@@ -7,5 +7,5 @@ import java.util.ArrayList;
 
 public interface ProbabilisticParser {
 
-    public ArrayList<ParseTree> parse(ProbabilisticContextFreeGrammar pCfg, Sentence sentence);
+    ArrayList<ParseTree> parse(ProbabilisticContextFreeGrammar pCfg, Sentence sentence);
 }

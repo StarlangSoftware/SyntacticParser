@@ -8,6 +8,8 @@ import Dictionary.Word;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -37,7 +39,7 @@ public class ContextFreeGrammar {
 
     public ContextFreeGrammar(String ruleFileName, String dictionaryFileName, int minCount){
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(ruleFileName), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(ruleFileName)), StandardCharsets.UTF_8));
             String line = br.readLine();
             while (line != null){
                 Rule newRule = new Rule(line);

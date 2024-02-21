@@ -12,7 +12,7 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
 
     public ArrayList<ParseTree> parse(ProbabilisticContextFreeGrammar pCfg, Sentence sentence) {
         int i, j, k, x, y;
-        PartialParseList table[][];
+        PartialParseList[][] table;
         ProbabilisticParseNode leftNode, rightNode;
         double bestProbability, probability;
         ArrayList<Rule> candidates;
