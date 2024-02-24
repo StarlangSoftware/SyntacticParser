@@ -131,13 +131,13 @@ public class ContextFreeGrammar {
             nonTerminals.add(rule.leftHandSide.getName());
         }
         for (Rule rule : rules){
-            if (rule.rightHandSide.size() > 2){
+            if (rule.getRightHandSideSize() > 2){
                 rule.type = RuleType.MULTIPLE_NON_TERMINAL;
             } else {
-                if (rule.rightHandSide.size() == 2){
+                if (rule.getRightHandSideSize() == 2){
                     rule.type = RuleType.TWO_NON_TERMINAL;
                 } else {
-                    if (rule.rightHandSide.get(0).isTerminal() || Word.isPunctuation(rule.rightHandSide.get(0).getName()) || !nonTerminals.contains(rule.rightHandSide.get(0).getName())){
+                    if (rule.getRightHandSideAt(0).isTerminal() || Word.isPunctuation(rule.getRightHandSideAt(0).getName()) || !nonTerminals.contains(rule.getRightHandSideAt(0).getName())){
                         rule.type = RuleType.TERMINAL;
                     } else {
                         rule.type = RuleType.SINGLE_NON_TERMINAL;
@@ -423,9 +423,9 @@ public class ContextFreeGrammar {
         while (updateCandidate != null){
             ArrayList<Symbol> newRightHandSide = new ArrayList<>();
             Symbol newSymbol = new Symbol("X" + newVariableCount);
-            newRightHandSide.add(updateCandidate.getRightHandSide().get(0));
-            newRightHandSide.add(updateCandidate.getRightHandSide().get(1));
-            updateAllMultipleNonTerminalWithNewRule(updateCandidate.getRightHandSide().get(0), updateCandidate.getRightHandSide().get(1), newSymbol);
+            newRightHandSide.add(updateCandidate.getRightHandSideAt(0));
+            newRightHandSide.add(updateCandidate.getRightHandSideAt(1));
+            updateAllMultipleNonTerminalWithNewRule(updateCandidate.getRightHandSideAt(0), updateCandidate.getRightHandSideAt(1), newSymbol);
             addRule(new Rule(newSymbol, newRightHandSide, RuleType.TWO_NON_TERMINAL));
             updateCandidate = getMultipleNonTerminalCandidateToUpdate();
             newVariableCount++;

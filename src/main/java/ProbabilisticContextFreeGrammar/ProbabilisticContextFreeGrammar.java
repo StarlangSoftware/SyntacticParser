@@ -155,9 +155,9 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
         while (updateCandidate != null){
             ArrayList<Symbol> newRightHandSide = new ArrayList<>();
             Symbol newSymbol = new Symbol("X" + newVariableCount);
-            newRightHandSide.add(updateCandidate.getRightHandSide().get(0));
-            newRightHandSide.add(updateCandidate.getRightHandSide().get(1));
-            updateAllMultipleNonTerminalWithNewRule(updateCandidate.getRightHandSide().get(0), updateCandidate.getRightHandSide().get(1), newSymbol);
+            newRightHandSide.add(updateCandidate.getRightHandSideAt(0));
+            newRightHandSide.add(updateCandidate.getRightHandSideAt(1));
+            updateAllMultipleNonTerminalWithNewRule(updateCandidate.getRightHandSideAt(0), updateCandidate.getRightHandSideAt(1), newSymbol);
             addRule(new ProbabilisticRule(newSymbol, newRightHandSide, RuleType.TWO_NON_TERMINAL, 1.0));
             newVariableCount++;
             updateCandidate = getMultipleNonTerminalCandidateToUpdate();
