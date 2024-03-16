@@ -6,10 +6,10 @@ import ProbabilisticContextFreeGrammar.ProbabilisticParseNode;
 import java.util.ArrayList;
 
 public class PartialParseList {
-    private ArrayList<ParseNode> partialParses;
+    private final ArrayList<ParseNode> partialParses;
 
     public PartialParseList(){
-        partialParses = new ArrayList<ParseNode>();
+        partialParses = new ArrayList<>();
     }
 
     public void addPartialParse(ParseNode parseNode){

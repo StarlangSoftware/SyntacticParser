@@ -5,6 +5,8 @@ import ParseTree.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
@@ -14,7 +16,7 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
 
     public ProbabilisticContextFreeGrammar(String ruleFileName, String dictionaryFileName, int minCount){
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(ruleFileName), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(ruleFileName)), StandardCharsets.UTF_8));
             String line = br.readLine();
             while (line != null){
                 ProbabilisticRule newRule = new ProbabilisticRule(line);
@@ -26,8 +28,7 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
             rules.sort(comparator);
             Comparator<Rule> rightComparator = new RuleRightSideComparator();
             rulesRightSorted.sort(rightComparator);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
         readDictionary(dictionaryFileName);
         updateTypes();

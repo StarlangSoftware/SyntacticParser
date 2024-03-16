@@ -25,15 +25,14 @@ public class ContextFreeGrammar {
 
     protected void readDictionary(String dictionaryFileName){
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(dictionaryFileName), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(dictionaryFileName)), StandardCharsets.UTF_8));
             String line = br.readLine();
             while (line != null){
                 String[] items = line.split(" ");
                 dictionary.putNTimes(items[0], Integer.parseInt(items[1]));
                 line = br.readLine();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 
@@ -51,8 +50,7 @@ public class ContextFreeGrammar {
             rules.sort(comparator);
             Comparator<Rule> rightComparator = new RuleRightSideComparator();
             rulesRightSorted.sort(rightComparator);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
         readDictionary(dictionaryFileName);
         updateTypes();
@@ -192,16 +190,12 @@ public class ContextFreeGrammar {
             for (Rule rule : rules){
                 ruleWriter.write(rule.toString() + "\n");
             }
-            String dictionaryKeyString = "", dictionaryValueString = "";
             for (Map.Entry<String, Integer> set : dictionary.entrySet()) {
                 dictionaryWriter.write(set.getKey() + " " + set.getValue() + "\n");
-                dictionaryKeyString = dictionaryKeyString + " " + set.getKey();
-                dictionaryValueString = dictionaryValueString + " " + set.getValue();
             }
             ruleWriter.close();
             dictionaryWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 

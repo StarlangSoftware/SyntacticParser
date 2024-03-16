@@ -16,7 +16,7 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
         ProbabilisticParseNode leftNode, rightNode;
         double bestProbability, probability;
         ArrayList<Rule> candidates;
-        ArrayList<ParseTree> parseTrees = new ArrayList<ParseTree>();
+        ArrayList<ParseTree> parseTrees = new ArrayList<>();
         Sentence backUp = new Sentence();
         for (i = 0; i < sentence.wordCount(); i++){
             backUp.addWord(new Word(sentence.getWord(i).getName()));

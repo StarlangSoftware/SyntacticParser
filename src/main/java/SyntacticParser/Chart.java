@@ -3,7 +3,6 @@ package SyntacticParser;
 import ContextFreeGrammar.Rule;
 import ParseTree.Symbol;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,25 +11,24 @@ import java.util.Comparator;
 
 public class Chart {
 
-    private ArrayList<ChartEntry> chartEntries;
-    private ArrayList<ChartEntry> chartEntriesSorted;
-    private ArrayList<ChartEntry> chartEntriesNextCategorySorted;
+    private final ArrayList<ChartEntry> chartEntries;
+    private final ArrayList<ChartEntry> chartEntriesSorted;
+    private final ArrayList<ChartEntry> chartEntriesNextCategorySorted;
 
     public Chart(){
-        chartEntries = new ArrayList<ChartEntry>();
-        chartEntriesSorted = new ArrayList<ChartEntry>();
-        chartEntriesNextCategorySorted = new ArrayList<ChartEntry>();
+        chartEntries = new ArrayList<>();
+        chartEntriesSorted = new ArrayList<>();
+        chartEntriesNextCategorySorted = new ArrayList<>();
     }
 
     public void writeToFile(String fileName){
         try {
-            FileWriter fw = new FileWriter(new File(fileName));
+            FileWriter fw = new FileWriter(fileName);
             for (ChartEntry entry:chartEntriesSorted){
                 fw.write(entry.toString() + "\n");
             }
             fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 
@@ -102,7 +100,7 @@ public class Chart {
     public ArrayList<ChartEntry> getNextCategoryX(Symbol X){
         int middle, middleUp, middleDown;
         ChartEntry dummyChartEntry;
-        ArrayList<ChartEntry> result = new ArrayList<ChartEntry>();
+        ArrayList<ChartEntry> result = new ArrayList<>();
         Comparator<ChartEntry> nextCategoryComparator = new ChartEntryNextCategoryComparator();
         dummyChartEntry = new ChartEntry(new Rule(X, X), 0, 0, 0);
         middle = Collections.binarySearch(chartEntriesNextCategorySorted, dummyChartEntry, nextCategoryComparator);
@@ -126,7 +124,7 @@ public class Chart {
     }
 
     public ArrayList<ChartEntry> getSentenceChartEntries(int wordCount){
-        ArrayList<ChartEntry> result = new ArrayList<ChartEntry>();
+        ArrayList<ChartEntry> result = new ArrayList<>();
         for (ChartEntry entry : chartEntriesSorted){
             if (entry.isComplete() && entry.from() == 0 && entry.to() == wordCount && entry.getRule().getLeftHandSide().equals(new Symbol("S"))){
                 result.add(entry);

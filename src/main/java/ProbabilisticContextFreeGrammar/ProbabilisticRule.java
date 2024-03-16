@@ -26,7 +26,7 @@ public class ProbabilisticRule extends Rule {
         String right = rule.substring(rule.indexOf("->") + 2, rule.indexOf('[')).trim();
         leftHandSide = new Symbol(left);
         String[] rightSide = right.split(" ");
-        rightHandSide = new ArrayList<Symbol>();
+        rightHandSide = new ArrayList<>();
         for (i = 0; i < rightSide.length; i++){
             rightHandSide.add(new Symbol(rightSide[i]));
         }

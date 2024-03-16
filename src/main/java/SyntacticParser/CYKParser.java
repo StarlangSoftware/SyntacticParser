@@ -11,10 +11,10 @@ public class CYKParser implements SyntacticParser{
 
     public ArrayList<ParseTree> parse(ContextFreeGrammar cfg, Sentence sentence) {
         int i, j, k, x, y;
-        PartialParseList table[][];
+        PartialParseList[][] table;
         ParseNode leftNode, rightNode;
         ArrayList<Rule> candidates;
-        ArrayList<ParseTree> parseTrees = new ArrayList<ParseTree>();
+        ArrayList<ParseTree> parseTrees = new ArrayList<>();
         Sentence backUp = new Sentence();
         for (i = 0; i < sentence.wordCount(); i++){
             backUp.addWord(new Word(sentence.getWord(i).getName()));

@@ -13,15 +13,7 @@ public class RuleRightSideComparator implements Comparator<Rule> {
                 return ruleA.getRightHandSideAt(i).getName().compareTo(ruleB.getRightHandSideAt(i).getName());
             }
         }
-        if (ruleA.getRightHandSideSize() < ruleB.getRightHandSideSize()){
-            return -1;
-        } else {
-            if (ruleA.getRightHandSideSize() > ruleB.getRightHandSideSize()){
-                return 1;
-            } else {
-                return 0;
-            }
-        }
+        return Integer.compare(ruleA.getRightHandSideSize(), ruleB.getRightHandSideSize());
     }
 
 }

@@ -9,6 +9,7 @@ import Util.DrawingButton;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
@@ -53,10 +54,8 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
         itemDeleteSymbol.addActionListener(e -> deleteSymbol());
         itemSplitNode.addActionListener(e -> splitNode());
         itemDeleteSubtree.addActionListener(e -> deleteSubtree());
-        JMenuItem itemViewRules = addMenuItem(projectMenu, "View Rules", KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-        itemViewRules.addActionListener(e -> {
-            new ViewTreeSyntacticAnnotationFrame(treeBank, this);
-        });
+        JMenuItem itemViewRules = addMenuItem(projectMenu, "View Rules", KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+        itemViewRules.addActionListener(e -> new ViewTreeSyntacticAnnotationFrame(treeBank, this));
     }
 
     @Override

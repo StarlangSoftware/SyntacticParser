@@ -5,7 +5,7 @@ import ParseTree.Symbol;
 
 public class ProbabilisticParseNode extends ParseNode {
 
-    private double logProbability;
+    private final double logProbability;
 
     public ProbabilisticParseNode(ParseNode left, ParseNode right, Symbol data, double logProbability){
         super(left, right, data);

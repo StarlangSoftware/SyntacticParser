@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class EarleyParser implements SyntacticParser {
 
-    private ArrayList predictedList[];
+    private ArrayList[] predictedList;
     private Map<String, Integer> completedList;
 
     private void predictor(ContextFreeGrammar cfg, Chart[] chart, ChartEntry chartEntry){

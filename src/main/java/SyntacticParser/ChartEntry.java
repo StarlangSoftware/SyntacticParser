@@ -9,19 +9,19 @@ import java.util.ArrayList;
 
 public class ChartEntry{
 
-    private Rule rule;
-    private int from;
-    private int to;
-    private int dotPlace;
+    private final Rule rule;
+    private final int from;
+    private final int to;
+    private final int dotPlace;
     private double probability = 1.0;
-    private ArrayList<ChartEntry> states;
+    private final ArrayList<ChartEntry> states;
 
     public ChartEntry(Rule rule, int from, int to, int dotPlace){
         this.rule = rule;
         this.from = from;
         this.to = to;
         this.dotPlace = dotPlace;
-        states = new ArrayList<ChartEntry>();
+        states = new ArrayList<>();
     }
 
     public ChartEntry(ProbabilisticRule rule, int from, int to, int dotPlace){
@@ -34,10 +34,8 @@ public class ChartEntry{
         this.from = from;
         this.to = to;
         this.dotPlace = dotPlace;
-        states = new ArrayList<ChartEntry>();
-        for (ChartEntry state: current.states){
-            states.add(state);
-        }
+        states = new ArrayList<>();
+        states.addAll(current.states);
         states.add(added);
     }
 
@@ -56,7 +54,7 @@ public class ChartEntry{
 
     public ParseNode constructParseNode(){
         ParseNode node;
-        if (states.size() == 0){
+        if (states.isEmpty()){
             node = new ParseNode(new ParseNode(rule.getRightHandSideAt(0)), rule.getLeftHandSide());
         } else {
             node = new ParseNode(rule.getLeftHandSide());
@@ -102,28 +100,28 @@ public class ChartEntry{
 
     public String toString(){
         int i = 0;
-        String result = rule.getLeftHandSide() + " -> ";
+        StringBuilder result = new StringBuilder(rule.getLeftHandSide() + " -> ");
         for (Symbol symbol: rule.getRightHandSide()){
             if (dotPlace == i){
-                result = result + "." + symbol;
+                result.append(".").append(symbol);
             } else {
-                result = result + " " + symbol;
+                result.append(" ").append(symbol);
             }
             i++;
         }
         if (dotPlace == i){
-            result = result + ".";
+            result.append(".");
         }
-        result = result + " [" + from + "," + to() + "]";
-        return result;
+        result.append(" [").append(from).append(",").append(to()).append("]");
+        return result.toString();
     }
 
     public String toStringExtended(){
-        String result = toString();
+        StringBuilder result = new StringBuilder(toString());
         for (ChartEntry state: states){
-            result = result + state.toStringExtended();
+            result.append(state.toStringExtended());
         }
-        return result;
+        return result.toString();
     }
 
 }

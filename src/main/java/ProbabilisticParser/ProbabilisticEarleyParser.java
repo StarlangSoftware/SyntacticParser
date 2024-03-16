@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ProbabilisticEarleyParser implements ProbabilisticParser {
 
-    private ArrayList predictedList[];
+    private ArrayList[] predictedList;
     private Map<String, Integer> completedList;
 
     private void predictor(ProbabilisticContextFreeGrammar pcfg, Chart[] chart, ChartEntry chartEntry){
@@ -90,7 +90,7 @@ public class ProbabilisticEarleyParser implements ProbabilisticParser {
         posTags = pcfg.partOfSpeechTags();
         for (i = 0; i <= sentence.wordCount(); i++){
             start = System.currentTimeMillis();
-            completedList = new HashMap<String, Integer>();
+            completedList = new HashMap<>();
             for (j = 0; j < chart[i].size(); j++){
                 chartEntry = chart[i].getEntry(j);
                 if (!chartEntry.isComplete()){
@@ -116,7 +116,7 @@ public class ProbabilisticEarleyParser implements ProbabilisticParser {
         ParseTree tree;
         double bestProbability, probability;
         Chart[] chart = constructChart(pCfg, sentence);
-        parseTrees = new ArrayList<ParseTree>();
+        parseTrees = new ArrayList<>();
         bestProbability = -Double.MAX_VALUE;
         entries = chart[sentence.wordCount()].getSentenceChartEntries(sentence.wordCount());
         for (ChartEntry entry: entries){
@@ -127,7 +127,7 @@ public class ProbabilisticEarleyParser implements ProbabilisticParser {
             }
             parseTrees.add(tree);
         }
-        result = new ArrayList<ParseTree>();
+        result = new ArrayList<>();
         for (ParseTree parseTree: parseTrees){
             probability = pCfg.probability(parseTree);
             if (probability == bestProbability){

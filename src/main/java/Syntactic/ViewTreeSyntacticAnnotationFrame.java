@@ -28,7 +28,7 @@ public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionLi
 
     protected static final String ID_SORT = "sortid";
 
-    protected class RowComparator implements Comparator<ArrayList<String>> {
+    protected static class RowComparator implements Comparator<ArrayList<String>> {
 
         Collator collator;
 
@@ -91,51 +91,51 @@ public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionLi
 
     private void addRule(ParseTreeDrawable parseTree, ParseNodeDrawable parseNode){
         if (parseNode.numberOfChildren() > 0) {
-            String rule = parseNode.getData() + " ->";
-            String sentenceString = "<html>";
+            StringBuilder rule = new StringBuilder(parseNode.getData() + " ->");
+            StringBuilder sentenceString = new StringBuilder("<html>");
             for (int i = 0; i < parseNode.numberOfChildren(); i++) {
                 ParseNodeDrawable child = (ParseNodeDrawable) parseNode.getChild(i);
                 if (child.numberOfChildren() > 0){
-                    rule += " " + child.getData();
+                    rule.append(" ").append(child.getData());
                 } else {
                     try {
-                        rule += " " + child.getLayerInfo().getMorphologicalParseAt(0).getWord().getName();
+                        rule.append(" ").append(child.getLayerInfo().getMorphologicalParseAt(0).getWord().getName());
                     } catch (LayerNotExistsException | WordNotExistsException e) {
-                        rule += " " + child.getLayerData(ViewLayerType.TURKISH_WORD);
+                        rule.append(" ").append(child.getLayerData(ViewLayerType.TURKISH_WORD));
                     }
                 }
                 switch (i) {
                     case 0:
-                        sentenceString += " <b><font color=\"red\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"red\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                     case 1:
-                        sentenceString += " <b><font color=\"blue\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"blue\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                     case 2:
-                        sentenceString += " <b><font color=\"green\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"green\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                     case 3:
-                        sentenceString += " <b><font color=\"fuchsia\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"fuchsia\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                     case 4:
-                        sentenceString += " <b><font color=\"aqua\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"aqua\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                     case 5:
-                        sentenceString += " <b><font color=\"grey\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"grey\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                     case 6:
-                        sentenceString += " <b><font color=\"pink\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"pink\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                     default:
-                        sentenceString += " <b><font color=\"black\">" + child.toTurkishSentence() + "</font></b>";
+                        sentenceString.append(" <b><font color=\"black\">").append(child.toTurkishSentence()).append("</font></b>");
                         break;
                 }
             }
-            sentenceString += "</html>";
+            sentenceString.append("</html>");
             ArrayList<String> row = new ArrayList<>();
             row.add(parseTree.getFileDescription().getRawFileName());
-            row.add(rule);
-            row.add(sentenceString);
+            row.add(rule.toString());
+            row.add(sentenceString.toString());
             row.add("0");
             data.add(row);
             for (int i = 0; i < parseNode.numberOfChildren(); i++) {

@@ -17,7 +17,7 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
     private ParseNodeDrawable fromNode = null;
     private boolean dragged = false;
     private int draggedIndex = -1;
-    private JTextField editText;
+    private final JTextField editText;
 
     public TreeSyntacticPanel(String path, String fileName, ViewLayerType viewLayer) {
         super(path, fileName, viewLayer);

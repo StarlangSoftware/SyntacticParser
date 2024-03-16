@@ -15,7 +15,7 @@ public class Rule {
 
     public Rule(Symbol leftHandSide, Symbol rightHandSideSymbol){
         this.leftHandSide = leftHandSide;
-        this.rightHandSide = new ArrayList<Symbol>();
+        this.rightHandSide = new ArrayList<>();
         this.rightHandSide.add(rightHandSideSymbol);
     }
 
@@ -40,7 +40,7 @@ public class Rule {
         String right = rule.substring(rule.indexOf("->") + 2).trim();
         leftHandSide = new Symbol(left);
         String[] rightSide = right.split(" ");
-        rightHandSide = new ArrayList<Symbol>();
+        rightHandSide = new ArrayList<>();
         for (i = 0; i < rightSide.length; i++){
             rightHandSide.add(new Symbol(rightSide[i]));
         }
@@ -96,11 +96,11 @@ public class Rule {
     }
 
     public String toString(){
-        String result = leftHandSide + " -> ";
+        StringBuilder result = new StringBuilder(leftHandSide + " -> ");
         for (Symbol symbol: rightHandSide){
-            result = result + " " + symbol;
+            result.append(" ").append(symbol);
         }
-        return result;
+        return result.toString();
     }
 
     @Override
