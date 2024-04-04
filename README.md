@@ -100,5 +100,5 @@ SyntacticParser
         <dependency>
             <groupId>io.github.starlangsoftware</groupId>
             <artifactId>SyntacticParser</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.12</version>
         </dependency>
