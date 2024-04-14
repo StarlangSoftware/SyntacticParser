@@ -1,4 +1,4 @@
-package Syntactic;
+package Annotation;
 
 import AnnotatedSentence.ViewLayerType;
 import AnnotatedTree.*;
@@ -19,6 +19,13 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
     private int draggedIndex = -1;
     private final JTextField editText;
 
+    /**
+     * Constructor for the syntactic editor panel for a parse tree. It also adds the edit text listener.
+     *
+     * @param path      The absolute path of the annotated parse tree.
+     * @param fileName  The raw file name of the annotated parse tree.
+     * @param viewLayer -
+     */
     public TreeSyntacticPanel(String path, String fileName, ViewLayerType viewLayer) {
         super(path, fileName, viewLayer);
         editText = new JTextField();
@@ -26,9 +33,9 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         editText.setVisible(false);
         editText.addActionListener(actionEvent -> {
             isEditing = false;
-            if (!editText.getText().contains("(") && !editText.getText().contains(")") && !editText.getText().contains("{") && !editText.getText().contains("}")){
+            if (!editText.getText().contains("(") && !editText.getText().contains(")") && !editText.getText().contains("{") && !editText.getText().contains("}")) {
                 TreeEditAction action;
-                if (editableNode.isLeaf()){
+                if (editableNode.isLeaf()) {
                     action = new LayerAction(TreeSyntacticPanel.this, editableNode.getLayerInfo(), editText.getText(), ViewLayerType.TURKISH_WORD);
                 } else {
                     action = new EditSymbolAction(TreeSyntacticPanel.this, editableNode, new Symbol(editText.getText()));
@@ -45,8 +52,11 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         addMouseMotionListener(this);
     }
 
-    public void addParent(){
-        if (editableNode != null && editableNode.numberOfChildren() > 0){
+    /**
+     * Adds a new empty parent to the given node.
+     */
+    public void addParent() {
+        if (editableNode != null && editableNode.numberOfChildren() > 0) {
             AddParentAction action = new AddParentAction(this, editableNode);
             action.execute();
             actionList.add(action);
@@ -55,10 +65,13 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
-    public void editSymbol(){
-        if (editableNode != null){
+    /**
+     * Changes the symbol of the selected node.
+     */
+    public void editSymbol() {
+        if (editableNode != null) {
             isEditing = true;
-            if (editableNode.isLeaf()){
+            if (editableNode.isLeaf()) {
                 editText.setText(editableNode.getLayerData(ViewLayerType.TURKISH_WORD));
             } else {
                 editText.setText(editableNode.getData().getName());
@@ -70,8 +83,11 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
-    public void deleteSymbol(){
-        if (editableNode != null && (editableNode.numberOfChildren() != 1 || !editableNode.getChild(0).isLeaf())){
+    /**
+     * Deletes the selected node.
+     */
+    public void deleteSymbol() {
+        if (editableNode != null && (editableNode.numberOfChildren() != 1 || !editableNode.getChild(0).isLeaf())) {
             DeleteNodeAction action = new DeleteNodeAction(this, editableNode);
             action.execute();
             actionList.add(action);
@@ -80,8 +96,11 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
-    public void deleteSubtree(){
-        if (editableNode != null && !editableNode.isLeaf()){
+    /**
+     * Deletes the subtree rooted at the selected node.
+     */
+    public void deleteSubtree() {
+        if (editableNode != null && !editableNode.isLeaf()) {
             DeleteSubtreeAction action = new DeleteSubtreeAction(this, editableNode);
             action.execute();
             actionList.add(action);
@@ -90,8 +109,11 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
-    public void splitNode(){
-        if (editableNode != null && editableNode.numberOfChildren() == 0){
+    /**
+     * Divides the selected node into multiple child nodes. The node should be a multiword expression such as 'ödü patladı'.
+     */
+    public void splitNode() {
+        if (editableNode != null && editableNode.numberOfChildren() == 0) {
             SplitNodeAction action = new SplitNodeAction(this, currentTree, editableNode);
             action.execute();
             actionList.add(action);
@@ -100,24 +122,34 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
+    /**
+     * If the user presses mouse button, fromNode will be determined.
+     *
+     * @param mouseEvent Mouse event to be handled
+     */
     public void mousePressed(MouseEvent mouseEvent) {
         ParseNode node = currentTree.getNodeAt(mouseEvent.getX(), mouseEvent.getY());
-        if (node == previousNode && previousNode != null){
+        if (node == previousNode && previousNode != null) {
             fromNode = previousNode;
         }
     }
 
+    /**
+     * If the user ends a drag event, which is understood by draggedNode not null, a move subtree action is executed.
+     *
+     * @param mouseEvent Mouse event to be handled
+     */
     public void mouseReleased(MouseEvent mouseEvent) {
-        if (fromNode != null){
+        if (fromNode != null) {
             fromNode.setSelected(false);
             fromNode.setEditable(false);
         }
-        if (draggedNode != null){
+        if (draggedNode != null) {
             draggedNode.setDragged(false);
             draggedNode.setSelected(false);
             draggedNode.setEditable(false);
         }
-        if (fromNode != null && draggedNode != null && dragged){
+        if (fromNode != null && draggedNode != null && dragged) {
             MoveSubtreeAction action = new MoveSubtreeAction(this, currentTree, fromNode, draggedNode, draggedIndex);
             action.execute();
             actionList.add(action);
@@ -128,16 +160,21 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         this.repaint();
     }
 
+    /**
+     * Starts a possible mouse drag event.
+     *
+     * @param mouseEvent Mouse event to be handled
+     */
     public void mouseDragged(MouseEvent mouseEvent) {
         ParseNodeDrawable node = currentTree.getNodeAt(mouseEvent.getX(), mouseEvent.getY());
         dragged = true;
-        if (node != null && node != previousNode && node.numberOfChildren() > 0 && !node.getChild(0).isLeaf() && !fromNode.isDescendant(node)){
+        if (node != null && node != previousNode && node.numberOfChildren() > 0 && !node.getChild(0).isLeaf() && !fromNode.isDescendant(node)) {
             draggedNode = node;
             draggedIndex = (int) (((draggedNode.numberOfChildren() + 1) * (mouseEvent.getX() - node.getArea().getX())) / (node.getArea().getWidth() + 0.0));
             draggedNode.setDragged(true, draggedIndex);
             this.repaint();
         } else {
-            if (node == null && draggedNode != null){
+            if (node == null && draggedNode != null) {
                 draggedNode.setDragged(false);
                 draggedNode = null;
                 this.repaint();
@@ -145,26 +182,31 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
+    /**
+     * When the mouse is moved, the previousNode can be changed, if the mouse is on top of a node.
+     *
+     * @param mouseEvent Mouse move event to handle.
+     */
     public void mouseMoved(MouseEvent mouseEvent) {
         ParseNodeDrawable node = currentTree.getNodeAt(mouseEvent.getX(), mouseEvent.getY());
-            if (node != null && node != previousNode && !dragged && !isEditing){
-                if (previousNode != null)
-                    previousNode.setSelected(false);
-                node.setSelected(true);
-                previousNode = node;
+        if (node != null && node != previousNode && !dragged && !isEditing) {
+            if (previousNode != null)
+                previousNode.setSelected(false);
+            node.setSelected(true);
+            previousNode = node;
+            this.repaint();
+        } else {
+            if (node == null && previousNode != null && !dragged && !isEditing) {
+                previousNode.setSelected(false);
+                previousNode = null;
                 this.repaint();
-            } else {
-                if (node == null && previousNode != null && !dragged && !isEditing){
-                    previousNode.setSelected(false);
-                    previousNode = null;
-                    this.repaint();
-                }
             }
+        }
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
         ParseNodeDrawable node = currentTree.getNodeAt(mouseEvent.getX(), mouseEvent.getY());
-        if (node != null){
+        if (node != null) {
             if (editableNode != null) {
                 editableNode.setEditable(false);
             }
@@ -177,6 +219,14 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
+    /**
+     * The size of the string displayed. If it is a leaf node, it returns the size of the word. Otherwise, it returns
+     * the size of the symbol in the node.
+     *
+     * @param parseNode Parse node
+     * @param g         Graphics on which tree will be drawn.
+     * @return Size of the string displayed.
+     */
     protected int getStringSize(ParseNodeDrawable parseNode, Graphics g) {
         if (parseNode.numberOfChildren() == 0) {
             return g.getFontMetrics().stringWidth(parseNode.getLayerData(ViewLayerType.TURKISH_WORD));
@@ -185,15 +235,31 @@ public class TreeSyntacticPanel extends TreeStructureEditorPanel {
         }
     }
 
-    protected void drawString(ParseNodeDrawable parseNode, Graphics g, int x, int y){
-        if (parseNode.numberOfChildren() == 0){
+    /**
+     * If the node is a leaf node, it draws the word. Otherwise, it draws the node symbol.
+     *
+     * @param parseNode Parse Node
+     * @param g         Graphics on which symbol is drawn.
+     * @param x         x coordinate
+     * @param y         y coordinate
+     */
+    protected void drawString(ParseNodeDrawable parseNode, Graphics g, int x, int y) {
+        if (parseNode.numberOfChildren() == 0) {
             g.drawString(parseNode.getLayerData(ViewLayerType.TURKISH_WORD), x, y);
         } else {
             g.drawString(parseNode.getData().getName(), x, y);
         }
     }
 
-    protected void setArea(ParseNodeDrawable parseNode, int x, int y, int stringSize){
+    /**
+     * Sets the size of the enclosing area of the parse node (for selecting, editing etc.).
+     *
+     * @param parseNode  Parse Node
+     * @param x          x coordinate of the center of the node.
+     * @param y          y coordinate of the center of the node.
+     * @param stringSize Size of the string in terms of pixels.
+     */
+    protected void setArea(ParseNodeDrawable parseNode, int x, int y, int stringSize) {
         parseNode.setArea(x - 5, y - 15, stringSize + 10, 20);
     }
 

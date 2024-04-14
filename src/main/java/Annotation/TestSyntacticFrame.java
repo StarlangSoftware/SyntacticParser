@@ -1,4 +1,4 @@
-package Syntactic;
+package Annotation;
 
 public class TestSyntacticFrame {
 

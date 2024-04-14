@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>NlpToolkit.SyntacticParser</name>
-    <description>Syntactic Parsing Algorithms</description>
+    <description>Annotation Parsing Algorithms</description>
     <url>https://github.com/StarlangSoftware/SyntacticParser</url>
 
     <organization>
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>io.github.starlangsoftware</groupId>
             <artifactId>DataCollector</artifactId>
-            <version>1.0.49</version>
+            <version>1.0.61</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

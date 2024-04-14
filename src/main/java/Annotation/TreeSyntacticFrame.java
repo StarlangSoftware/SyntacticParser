@@ -1,4 +1,4 @@
-package Syntactic;
+package Annotation;
 
 import AnnotatedSentence.ViewLayerType;
 import AnnotatedTree.*;
@@ -20,9 +20,13 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
     static final protected String SPLITNODE = "splitnode";
     static final protected String DELETESUBTREE = "deletesubtree";
 
+    /**
+     * Constructor of the Syntactic annotation frame for parse trees. It reads the annotated tree bank and adds several
+     * buttons such as add parent, edit symbol, split node, delete symbol, delete subtree.
+     */
     public TreeSyntacticFrame(){
         TreeBankDrawable treeBank = new TreeBankDrawable(new File(TreeEditorPanel.treePath));
-        this.setTitle("Syntactic");
+        this.setTitle("Annotation");
         JButton button;
         toolBar.addSeparator();
         button = new DrawingButton(DataCollector.class, this, "addparent", ADDPARENT, "Add Parent");
@@ -63,6 +67,9 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
         return new TreeSyntacticPanel(currentPath, rawFileName, ViewLayerType.TURKISH_WORD);
     }
 
+    /**
+     * Adds a new empty parent to the selected node.
+     */
     protected void addParent(){
         TreeSyntacticPanel current = (TreeSyntacticPanel) ((JScrollPane) projectPane.getSelectedComponent()).getViewport().getView();
         if (current != null){
@@ -70,6 +77,9 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
         }
     }
 
+    /**
+     * Changes the symbol of the selected node.
+     */
     protected void editSymbol(){
         TreeSyntacticPanel current = (TreeSyntacticPanel) ((JScrollPane) projectPane.getSelectedComponent()).getViewport().getView();
         if (current != null){
@@ -77,6 +87,9 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
         }
     }
 
+    /**
+     * Deletes the selected node.
+     */
     protected void deleteSymbol(){
         TreeSyntacticPanel current = (TreeSyntacticPanel) ((JScrollPane) projectPane.getSelectedComponent()).getViewport().getView();
         if (current != null){
@@ -84,6 +97,9 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
         }
     }
 
+    /**
+     * Divides the selected node into multiple child nodes. The node should be a multiword expression such as 'ödü patladı'.
+     */
     protected void splitNode(){
         TreeSyntacticPanel current = (TreeSyntacticPanel) ((JScrollPane) projectPane.getSelectedComponent()).getViewport().getView();
         if (current != null){
@@ -91,6 +107,9 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
         }
     }
 
+    /**
+     * Deletes the subtree rooted at the selected node.
+     */
     protected void deleteSubtree(){
         TreeSyntacticPanel current = (TreeSyntacticPanel) ((JScrollPane) projectPane.getSelectedComponent()).getViewport().getView();
         if (current != null){
@@ -98,6 +117,10 @@ public class TreeSyntacticFrame extends TreeStructureEditorFrame {
         }
     }
 
+    /**
+     * Calls corresponding functions for the buttons.
+     * @param e Action event to be responded.
+     */
     public void actionPerformed(ActionEvent e) {
         super.actionPerformed(e);
         switch (e.getActionCommand()){

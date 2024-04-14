@@ -1,4 +1,4 @@
-package Syntactic;
+package Annotation;
 
 import AnnotatedSentence.LayerNotExistsException;
 import AnnotatedSentence.ViewLayerType;
@@ -7,6 +7,7 @@ import AnnotatedTree.ParseTreeDrawable;
 import AnnotatedTree.TreeBankDrawable;
 import AnnotatedTree.WordNotExistsException;
 import DataCollector.ParseTree.TreeEditorPanel;
+import DataCollector.RowComparator2;
 import Util.DrawingButton;
 
 import javax.swing.*;
@@ -15,10 +16,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Locale;
 
 public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionListener {
     protected ArrayList<ArrayList<String>> data;
@@ -27,29 +25,6 @@ public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionLi
     protected int COLOR_COLUMN_INDEX;
 
     protected static final String ID_SORT = "sortid";
-
-    protected static class RowComparator implements Comparator<ArrayList<String>> {
-
-        Collator collator;
-
-        public RowComparator(){
-            Locale locale = new Locale("tr");
-            collator = Collator.getInstance(locale);
-        }
-
-        @Override
-        public int compare(ArrayList<String> o1, ArrayList<String> o2) {
-            if (o1.get(1).equals(o2.get(1))) {
-                if (o1.get(0).equals(o2.get(0))) {
-                    return collator.compare(o1.get(0), o2.get(0));
-                } else {
-                    return collator.compare(o1.get(2), o2.get(2));
-                }
-            } else {
-                return collator.compare(o1.get(1), o2.get(1));
-            }
-        }
-    }
 
     protected void updateGroupColors(){
         int groupCount = 0;
@@ -66,7 +41,7 @@ public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionLi
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case ID_SORT:
-                data.sort(new RowComparator());
+                data.sort(new RowComparator2(1, 0));
                 updateGroupColors();
                 JOptionPane.showMessageDialog(this, "Rules Sorted!", "Sorting Complete", JOptionPane.INFORMATION_MESSAGE);
                 break;
@@ -145,6 +120,14 @@ public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionLi
         }
     }
 
+    /**
+     * Constructs the data table. For every sentence, the columns are:
+     * <ol>
+     *     <li>Parse tree file name</li>
+     *     <li>Rule for the tree</li>
+     * </ol>
+     * @param treeBank Annotated NER treebank
+     */
     protected void prepareData(TreeBankDrawable treeBank){
         data = new ArrayList<>();
         for (int i = 0; i < treeBank.size(); i++){
@@ -171,10 +154,6 @@ public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionLi
             return data.get(row).get(col);
         }
 
-        public boolean isCellEditable(int row, int col) {
-            return false;
-        }
-
         public String getColumnName(int col) {
             switch (col) {
                 case 0:
@@ -190,6 +169,12 @@ public class ViewTreeSyntacticAnnotationFrame extends JFrame implements ActionLi
 
     }
 
+    /**
+     * Constructs syntactic tree frame viewer. If the user double-clicks any row, the method automatically creates a
+     * new panel showing associated parse tree.
+     * @param treeBank Annotated parse tree
+     * @param syntacticFrame Frame in which new panels will be created, when the user double-clicks a row.
+     */
     public ViewTreeSyntacticAnnotationFrame(TreeBankDrawable treeBank, TreeSyntacticFrame syntacticFrame){
         this.treeBank = treeBank;
         COLOR_COLUMN_INDEX = 3;
