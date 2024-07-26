@@ -10,6 +10,13 @@ import java.util.ArrayList;
 
 public class ProbabilisticCYKParser implements ProbabilisticParser {
 
+    /**
+     * Constructs an array of most probable parse trees for a given sentence according to the given grammar. CYK parser
+     * is based on a dynamic programming algorithm.
+     * @param pCfg Probabilistic context free grammar used in parsing.
+     * @param sentence Sentence to be parsed.
+     * @return Array list of most probable parse trees for the given sentence.
+     */
     public ArrayList<ParseTree> parse(ProbabilisticContextFreeGrammar pCfg, Sentence sentence) {
         int i, j, k, x, y;
         PartialParseList[][] table;
@@ -21,7 +28,7 @@ public class ProbabilisticCYKParser implements ProbabilisticParser {
         for (i = 0; i < sentence.wordCount(); i++){
             backUp.addWord(new Word(sentence.getWord(i).getName()));
         }
-        pCfg.removeExceptionalWordsFromSentence(sentence);
+        pCfg.updateExceptionalWordsInSentence(sentence);
         table = new PartialParseList[sentence.wordCount()][sentence.wordCount()];
         for (i = 0; i < sentence.wordCount(); i++)
             for (j = i; j < sentence.wordCount(); j++)
