@@ -11,11 +11,11 @@ public class ProbabilisticRule extends Rule {
     private int count = 0;
 
     /**
-     * Constructor for the probabilistic rule X -> beta. beta is a string of symbols from symbols (non-terminal)
+     * Constructor for the probabilistic rule X -&gt;  beta. beta is a string of symbols from symbols (non-terminal)
      * @param leftHandSide Non-terminal symbol X.
      * @param rightHandSide beta. beta is a string of symbols from symbols (non-terminal)
-     * @param type Type of the rule. TERMINAL if the rule is like X -> a, SINGLE_NON_TERMINAL if the rule is like X -> Y,
-     *             TWO_NON_TERMINAL if the rule is like X -> YZ, MULTIPLE_NON_TERMINAL if the rule is like X -> YZT..
+     * @param type Type of the rule. TERMINAL if the rule is like X -&gt;  a, SINGLE_NON_TERMINAL if the rule is like X -&gt;  Y,
+     *             TWO_NON_TERMINAL if the rule is like X -&gt;  YZ, MULTIPLE_NON_TERMINAL if the rule is like X -&gt;  YZT..
      * @param probability Probability of the rule
      */
     public ProbabilisticRule(Symbol leftHandSide, ArrayList<Symbol> rightHandSide, RuleType type, double probability){
@@ -24,7 +24,7 @@ public class ProbabilisticRule extends Rule {
     }
 
     /**
-     * Constructor for the rule X -> beta. beta is a string of symbols from symbols (non-terminal)
+     * Constructor for the rule X -&gt;  beta. beta is a string of symbols from symbols (non-terminal)
      * @param leftHandSide Non-terminal symbol X.
      * @param rightHandSide beta. beta is a string of symbols from symbols (non-terminal)
      */
@@ -33,9 +33,9 @@ public class ProbabilisticRule extends Rule {
     }
 
     /**
-     * Constructor for any probabilistic rule from a string. The string is of the form X -> .... [probability] The
+     * Constructor for any probabilistic rule from a string. The string is of the form X -&gt;  .... [probability] The
      * method constructs left hand side symbol and right hand side symbol(s) from the input string.
-     * @param rule String containing the rule. The string is of the form X -> .... [probability]
+     * @param rule String containing the rule. The string is of the form X -&gt;  .... [probability]
      */
     public ProbabilisticRule(String rule){
         int i;
@@ -83,8 +83,8 @@ public class ProbabilisticRule extends Rule {
     }
 
     /**
-     * Converts the rule to the form X -> ... [probability]
-     * @return String form of the rule in the form of X -> ... [probability]
+     * Converts the rule to the form X -&gt;  ... [probability]
+     * @return String form of the rule in the form of X -&gt;  ... [probability]
      */
     public String toString(){
         return super.toString() + " [" + probability + "]";

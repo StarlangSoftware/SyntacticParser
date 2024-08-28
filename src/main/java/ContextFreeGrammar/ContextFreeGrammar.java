@@ -181,8 +181,8 @@ public class ContextFreeGrammar {
 
     /**
      * Updates the types of the rules according to the number of symbols on the right hand side. Rule type is TERMINAL
-     * if the rule is like X -> a, SINGLE_NON_TERMINAL if the rule is like X -> Y, TWO_NON_TERMINAL if the rule is like
-     * X -> YZ, MULTIPLE_NON_TERMINAL if the rule is like X -> YZT...
+     * if the rule is like X -&gt;  a, SINGLE_NON_TERMINAL if the rule is like X -&gt;  Y, TWO_NON_TERMINAL if the rule is like
+     * X -&gt;  YZ, MULTIPLE_NON_TERMINAL if the rule is like X -&gt;  YZT...
      */
     protected void updateTypes(){
         HashSet<String> nonTerminals = new HashSet<>();
@@ -329,11 +329,11 @@ public class ContextFreeGrammar {
     }
 
     /**
-     * Returns rules formed as X -> ... Since there can be more than one rule, which have X on the left side, the method
+     * Returns rules formed as X -&gt;  ... Since there can be more than one rule, which have X on the left side, the method
      * first binary searches the rule to obtain the position of such a rule, then goes up and down to obtain others
      * having X on the left side.
      * @param X Left side of the rule
-     * @return Rules of the form X -> ...
+     * @return Rules of the form X -&gt;  ...
      */
     public ArrayList<Rule> getRulesWithLeftSideX(Symbol X){
         int middle, middleUp, middleDown;
@@ -357,8 +357,8 @@ public class ContextFreeGrammar {
     }
 
     /**
-     * Returns all symbols X from terminal rules such as X -> a.
-     * @return All symbols X from terminal rules such as X -> a.
+     * Returns all symbols X from terminal rules such as X -&gt;  a.
+     * @return All symbols X from terminal rules such as X -&gt;  a.
      */
     public ArrayList<Symbol> partOfSpeechTags(){
         ArrayList<Symbol> result = new ArrayList<>();
@@ -371,8 +371,8 @@ public class ContextFreeGrammar {
     }
 
     /**
-     * Returns all symbols X from all rules such as X -> ...
-     * @return All symbols X from all rules such as X -> ...
+     * Returns all symbols X from all rules such as X -&gt;  ...
+     * @return All symbols X from all rules such as X -&gt;  ...
      */
     public ArrayList<Symbol> getLeftSide(){
         ArrayList<Symbol> result = new ArrayList<>();
@@ -386,7 +386,7 @@ public class ContextFreeGrammar {
 
     /**
      * Returns all rules with the given terminal symbol on the right hand side, that is it returns all terminal rules
-     * such as X -> s
+     * such as X -&gt;  s
      * @param s Terminal symbol on the right hand side.
      * @return All rules with the given terminal symbol on the right hand side
      */
@@ -417,7 +417,7 @@ public class ContextFreeGrammar {
 
     /**
      * Returns all rules with the given non-terminal symbol on the right hand side, that is it returns all non-terminal
-     * rules such as X -> S
+     * rules such as X -&gt;  S
      * @param S Non-terminal symbol on the right hand side.
      * @return All rules with the given non-terminal symbol on the right hand side
      */
@@ -444,7 +444,7 @@ public class ContextFreeGrammar {
 
     /**
      * Returns all rules with the given two non-terminal symbols on the right hand side, that is it returns all
-     * non-terminal rules such as X -> AB.
+     * non-terminal rules such as X -&gt;  AB.
      * @param A First non-terminal symbol on the right hand side.
      * @param B Second non-terminal symbol on the right hand side.
      * @return All rules with the given two non-terminal symbols on the right hand side
@@ -473,7 +473,7 @@ public class ContextFreeGrammar {
 
     /**
      * Returns the symbol on the right side of the first rule with one non-terminal symbol on the right hand side, that
-     * is it returns S of the first rule such as X -> S. S should also not be in the given removed list.
+     * is it returns S of the first rule such as X -&gt;  S. S should also not be in the given removed list.
      * @param removedList Discarded list for symbol S.
      * @return The symbol on the right side of the first rule with one non-terminal symbol on the right hand side. The
      * symbol to be returned should also not be in the given discarded list.
@@ -491,7 +491,7 @@ public class ContextFreeGrammar {
 
     /**
      * Returns all rules with more than two non-terminal symbols on the right hand side, that is it returns all
-     * non-terminal rules such as X -> ABC...
+     * non-terminal rules such as X -&gt;  ABC...
      * @return All rules with more than two non-terminal symbols on the right hand side.
      */
     protected Rule getMultipleNonTerminalCandidateToUpdate(){
@@ -506,9 +506,9 @@ public class ContextFreeGrammar {
     }
 
     /**
-     * In conversion to Chomsky Normal Form, rules like X -> Y are removed and new rules for every rule as Y -> beta are
-     * replaced with X -> beta. The method first identifies all X -> Y rules. For every such rule, all rules Y -> beta
-     * are identified. For every such rule, the method adds a new rule X -> beta. Every Y -> beta rule is then deleted.
+     * In conversion to Chomsky Normal Form, rules like X -&gt;  Y are removed and new rules for every rule as Y -&gt;  beta are
+     * replaced with X -&gt;  beta. The method first identifies all X -&gt;  Y rules. For every such rule, all rules Y -&gt;  beta
+     * are identified. For every such rule, the method adds a new rule X -&gt;  beta. Every Y -&gt;  beta rule is then deleted.
      */
     private void removeSingleNonTerminalFromRightHandSide(){
         ArrayList<Symbol> nonTerminalList;
@@ -532,7 +532,7 @@ public class ContextFreeGrammar {
     }
 
     /**
-     * In conversion to Chomsky Normal Form, rules like A -> BC... are replaced with A -> X1... and X1 -> BC. This
+     * In conversion to Chomsky Normal Form, rules like A -&gt;  BC... are replaced with A -&gt;  X1... and X1 -&gt;  BC. This
      * method replaces B and C non-terminals on the right hand side with X1 for all rules in the grammar.
      * @param first Non-terminal symbol B.
      * @param second Non-terminal symbol C.
@@ -547,8 +547,8 @@ public class ContextFreeGrammar {
     }
 
     /**
-     * In conversion to Chomsky Normal Form, rules like A -> BC... are replaced with A -> X1... and X1 -> BC. This
-     * method determines such rules and for every such rule, it adds new rule X1->BC and updates rule A->BC to A->X1.
+     * In conversion to Chomsky Normal Form, rules like A -&gt;  BC... are replaced with A -&gt;  X1... and X1 -&gt;  BC. This
+     * method determines such rules and for every such rule, it adds new rule X1-&gt; BC and updates rule A-&gt; BC to A-&gt; X1.
      */
     private void updateMultipleNonTerminalFromRightHandSide(){
         Rule updateCandidate;
@@ -567,9 +567,9 @@ public class ContextFreeGrammar {
     }
 
     /**
-     * The method converts the grammar into Chomsky normal form. First, rules like X -> Y are removed and new rules for
-     * every rule as Y -> beta are replaced with X -> beta. Second, rules like A -> BC... are replaced with A -> X1...
-     * and X1 -> BC.
+     * The method converts the grammar into Chomsky normal form. First, rules like X -&gt;  Y are removed and new rules for
+     * every rule as Y -&gt;  beta are replaced with X -&gt;  beta. Second, rules like A -&gt;  BC... are replaced with A -&gt;  X1...
+     * and X1 -&gt;  BC.
      */
     public void convertToChomskyNormalForm(){
         removeSingleNonTerminalFromRightHandSide();

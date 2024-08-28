@@ -215,9 +215,9 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
     }
 
     /**
-     * The method converts the grammar into Chomsky normal form. First, rules like X -> Y are removed and new rules for
-     * every rule as Y -> beta are replaced with X -> beta. Second, rules like A -> BC... are replaced with A -> X1...
-     * and X1 -> BC.
+     * The method converts the grammar into Chomsky normal form. First, rules like X -&gt;  Y are removed and new rules for
+     * every rule as Y -&gt;  beta are replaced with X -&gt;  beta. Second, rules like A -&gt;  BC... are replaced with A -&gt;  X1...
+     * and X1 -&gt;  BC.
      */
     public void convertToChomskyNormalForm(){
         removeSingleNonTerminalFromRightHandSide();

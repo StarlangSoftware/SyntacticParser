@@ -16,7 +16,7 @@ public class Rule {
     }
 
     /**
-     * Constructor for the rule X -> Y.
+     * Constructor for the rule X -&gt;  Y.
      * @param leftHandSide Non-terminal symbol X
      * @param rightHandSideSymbol Symbol Y (terminal or non-terminal)
      */
@@ -27,7 +27,7 @@ public class Rule {
     }
 
     /**
-     * Constructor for the rule X -> YZ.
+     * Constructor for the rule X -&gt;  YZ.
      * @param leftHandSide Non-terminal symbol X.
      * @param rightHandSideSymbol1 Symbol Y (non-terminal).
      * @param rightHandSideSymbol2 Symbol Z (non-terminal).
@@ -38,7 +38,7 @@ public class Rule {
     }
 
     /**
-     * Constructor for the rule X -> beta. beta is a string of symbols from symbols (non-terminal)
+     * Constructor for the rule X -&gt;  beta. beta is a string of symbols from symbols (non-terminal)
      * @param leftHandSide Non-terminal symbol X.
      * @param rightHandSide beta. beta is a string of symbols from symbols (non-terminal)
      */
@@ -48,11 +48,11 @@ public class Rule {
     }
 
     /**
-     * Constructor for the rule X -> beta. beta is a string of symbols from symbols (non-terminal)
+     * Constructor for the rule X -&gt;  beta. beta is a string of symbols from symbols (non-terminal)
      * @param leftHandSide Non-terminal symbol X.
      * @param rightHandSide beta. beta is a string of symbols from symbols (non-terminal)
-     * @param type Type of the rule. TERMINAL if the rule is like X -> a, SINGLE_NON_TERMINAL if the rule is like X -> Y,
-     *             TWO_NON_TERMINAL if the rule is like X -> YZ, MULTIPLE_NON_TERMINAL if the rule is like X -> YZT..
+     * @param type Type of the rule. TERMINAL if the rule is like X -&gt;  a, SINGLE_NON_TERMINAL if the rule is like X -&gt;  Y,
+     *             TWO_NON_TERMINAL if the rule is like X -&gt;  YZ, MULTIPLE_NON_TERMINAL if the rule is like X -&gt;  YZT..
      */
     public Rule(Symbol leftHandSide, ArrayList<Symbol> rightHandSide, RuleType type){
         this(leftHandSide, rightHandSide);
@@ -60,14 +60,14 @@ public class Rule {
     }
 
     /**
-     * Constructor for any rule from a string. The string is of the form X -> .... The method constructs left hand
+     * Constructor for any rule from a string. The string is of the form X -&gt;  .... The method constructs left hand
      * side symbol and right hand side symbol(s) from the input string.
-     * @param rule String containing the rule. The string is of the form X -> ....
+     * @param rule String containing the rule. The string is of the form X -&gt;  ....
      */
     public Rule(String rule){
         int i;
-        String left = rule.substring(0, rule.indexOf("->")).trim();
-        String right = rule.substring(rule.indexOf("->") + 2).trim();
+        String left = rule.substring(0, rule.indexOf("-> ")).trim();
+        String right = rule.substring(rule.indexOf("-> ") + 2).trim();
         leftHandSide = new Symbol(left);
         String[] rightSide = right.split(" ");
         rightHandSide = new ArrayList<>();
@@ -86,7 +86,7 @@ public class Rule {
     }
 
     /**
-     * Checks if the rule is left recursive or not. A rule is left recursive if it is of the form X -> X..., so its
+     * Checks if the rule is left recursive or not. A rule is left recursive if it is of the form X -&gt;  X..., so its
      * first symbol of the right side is the symbol on the left side.
      * @return True, if the rule is left recursive; false otherwise.
      */
@@ -95,7 +95,7 @@ public class Rule {
     }
 
     /**
-     * In conversion to Chomsky Normal Form, rules like A -> BC... are replaced with A -> X1... and X1 -> BC. This
+     * In conversion to Chomsky Normal Form, rules like A -&gt;  BC... are replaced with A -&gt;  X1... and X1 -&gt;  BC. This
      * method replaces B and C non-terminals on the right hand side with X1.
      * @param first Non-terminal symbol B.
      * @param second Non-terminal symbol C.
@@ -160,11 +160,11 @@ public class Rule {
     }
 
     /**
-     * Converts the rule to the form X -> ...
-     * @return String form of the rule in the form of X -> ...
+     * Converts the rule to the form X -&gt;  ...
+     * @return String form of the rule in the form of X -&gt;  ...
      */
     public String toString(){
-        StringBuilder result = new StringBuilder(leftHandSide + " -> ");
+        StringBuilder result = new StringBuilder(leftHandSide + " -&gt;  ");
         for (Symbol symbol: rightHandSide){
             result.append(" ").append(symbol);
         }
