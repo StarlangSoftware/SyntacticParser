@@ -11,7 +11,7 @@ Video Lectures
 For Developers
 ============
 
-You can also see [Cython](https://github.com/starlangsoftware/SyntacticParser-Cy), [C++](https://github.com/starlangsoftware/SyntacticParser-CPP), [C](https://github.com/starlangsoftware/SyntacticParser-C), [Js](https://github.com/starlangsoftware/SyntacticParser-Js), [Php](https://github.com/starlangsoftware/SyntacticParser-Php), or [C#](https://github.com/starlangsoftware/SyntacticParser-CPP) repository.
+You can also see [Python](https://github.com/starlangsoftware/SyntacticParser-Py), [Cython](https://github.com/starlangsoftware/SyntacticParser-Cy), [C++](https://github.com/starlangsoftware/SyntacticParser-CPP), [C](https://github.com/starlangsoftware/SyntacticParser-C), [Js](https://github.com/starlangsoftware/SyntacticParser-Js), [Php](https://github.com/starlangsoftware/SyntacticParser-Php), or [C#](https://github.com/starlangsoftware/SyntacticParser-CS) repository.
 
 ## Requirements
 
