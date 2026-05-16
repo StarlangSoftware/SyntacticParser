@@ -164,7 +164,7 @@ public class Rule {
      * @return String form of the rule in the form of X -&gt;  ...
      */
     public String toString(){
-        StringBuilder result = new StringBuilder(leftHandSide + " -&gt;  ");
+        StringBuilder result = new StringBuilder(leftHandSide + " -> ");
         for (Symbol symbol: rightHandSide){
             result.append(" ").append(symbol);
         }

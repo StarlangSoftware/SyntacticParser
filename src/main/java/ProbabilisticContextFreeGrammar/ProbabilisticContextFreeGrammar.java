@@ -1,5 +1,9 @@
 package ProbabilisticContextFreeGrammar;
 
+import AnnotatedSentence.ViewLayerType;
+import AnnotatedTree.ParseNodeDrawable;
+import AnnotatedTree.ParseTreeDrawable;
+import AnnotatedTree.TreeBankDrawable;
 import ContextFreeGrammar.*;
 import ParseTree.*;
 
@@ -78,6 +82,38 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
     }
 
     /**
+     * Another constructor for the ProbabilisticContextFreeGrammar class. Constructs the lexicon from the leaf nodes of
+     * the trees in the given treebank. Extracts rules from the non-leaf nodes of the trees in the given treebank. Also
+     * sets the minimum frequency parameter.
+     * @param treeBank Treebank containing the constituency trees.
+     * @param minCount Minimum frequency parameter.
+     */
+    public ProbabilisticContextFreeGrammar(TreeBankDrawable treeBank, int minCount){
+        ArrayList<Symbol> variables;
+        ArrayList<Rule> candidates;
+        int total;
+        constructDictionary(treeBank);
+        for (int i = 0; i < treeBank.size(); i++){
+            ParseTreeDrawable parseTree = treeBank.get(i);
+            updateExceptionalWordsInTree(parseTree, minCount);
+            addRules((ParseNodeDrawable)parseTree.getRoot());
+        }
+        variables = getLeftSide();
+        for (Symbol variable: variables){
+            candidates = getRulesWithLeftSideX(variable);
+            total = 0;
+            for (Rule candidate: candidates){
+                total += ((ProbabilisticRule) candidate).getCount();
+            }
+            for (Rule candidate: candidates){
+                ((ProbabilisticRule) candidate).normalizeProbability(total);
+            }
+        }
+        updateTypes();
+        this.minCount = minCount;
+    }
+
+    /**
      * Converts a parse node in a tree to a rule. The symbol in the parse node will be the symbol on the leaf side of the
      * rule, the symbols in the child nodes will be the symbols on the right hand side of the rule.
      * @param parseNode Parse node for which a rule will be created.
@@ -108,6 +144,47 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
     }
 
     /**
+     * Converts a parse node in a tree to a rule. The symbol in the parse node will be the symbol on the leaf side of the
+     * rule, the symbols in the child nodes will be the symbols on the right hand side of the rule.
+     * @param parseNode Parse node for which a rule will be created.
+     * @param trim If true, the tags will be trimmed. If the symbol's data contains '-' or '=', this method trims all
+     *             characters after those characters.
+     * @return A new rule constructed from a parse node and its children.
+     */
+    public static ProbabilisticRule toRule(ParseNodeDrawable parseNode, boolean trim){
+        Symbol left;
+        Symbol data;
+        ArrayList<Symbol> right = new ArrayList<>();
+        if (parseNode.isLeaf()){
+            data = new Symbol(parseNode.getLayerData(ViewLayerType.TURKISH_WORD));
+        } else {
+            data = parseNode.getData();
+        }
+        if (trim)
+            left = data.trimSymbol();
+        else
+            left = data;
+        for (int i = 0; i < parseNode.numberOfChildren(); i++) {
+            ParseNodeDrawable childNode = (ParseNodeDrawable) parseNode.getChild(i);
+            if (childNode.isLeaf()){
+                data = new Symbol(childNode.getLayerData(ViewLayerType.TURKISH_WORD));
+            } else {
+                data = childNode.getData();
+            }
+            if (data != null){
+                if (data.isTerminal() || !trim){
+                    right.add(data);
+                } else {
+                    right.add(data.trimSymbol());
+                }
+            } else {
+                return null;
+            }
+        }
+        return new ProbabilisticRule(left, right);
+    }
+
+    /**
      * Recursive method to generate all rules from a subtree rooted at the given node.
      * @param parseNode Root node of the subtree.
      */
@@ -128,6 +205,33 @@ public class ProbabilisticContextFreeGrammar extends ContextFreeGrammar {
         }
         for (int i = 0; i < parseNode.numberOfChildren(); i++) {
             ParseNode childNode = parseNode.getChild(i);
+            if (childNode.numberOfChildren() > 0){
+                addRules(childNode);
+            }
+        }
+    }
+
+    /**
+     * Recursive method to generate all rules from a subtree rooted at the given node.
+     * @param parseNode Root node of the subtree.
+     */
+    private void addRules(ParseNodeDrawable parseNode){
+        Rule existedRule;
+        ProbabilisticRule newRule;
+        newRule = toRule(parseNode, true);
+        if (newRule != null){
+            existedRule = searchRule(newRule);
+            if (existedRule == null){
+                addRule(newRule);
+                newRule.increment();
+            } else {
+                ((ProbabilisticRule) existedRule).increment();
+            }
+        } else {
+            System.out.println(this);
+        }
+        for (int i = 0; i < parseNode.numberOfChildren(); i++) {
+            ParseNodeDrawable childNode = (ParseNodeDrawable) parseNode.getChild(i);
             if (childNode.numberOfChildren() > 0){
                 addRules(childNode);
             }

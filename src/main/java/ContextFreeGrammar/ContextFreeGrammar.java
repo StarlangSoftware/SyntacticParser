@@ -1,5 +1,11 @@
 package ContextFreeGrammar;
 
+import AnnotatedSentence.ViewLayerType;
+import AnnotatedTree.ParseNodeDrawable;
+import AnnotatedTree.ParseTreeDrawable;
+import AnnotatedTree.Processor.Condition.IsLeafNode;
+import AnnotatedTree.Processor.NodeDrawableCollector;
+import AnnotatedTree.TreeBankDrawable;
 import Corpus.Sentence;
 import DataStructure.CounterHashMap;
 import ParseTree.*;
@@ -91,6 +97,24 @@ public class ContextFreeGrammar {
     }
 
     /**
+     * Another constructor for the ContextFreeGrammar class. Constructs the lexicon from the leaf nodes of the trees
+     * in the given treebank. Extracts rules from the non-leaf nodes of the trees in the given treebank. Also sets the
+     * minimum frequency parameter.
+     * @param treeBank Treebank containing the constituency trees.
+     * @param minCount Minimum frequency parameter.
+     */
+    public ContextFreeGrammar(TreeBankDrawable treeBank, int minCount){
+        constructDictionary(treeBank);
+        for (int i = 0; i < treeBank.size(); i++){
+            ParseTreeDrawable parseTree = treeBank.get(i);
+            updateExceptionalWordsInTree(parseTree, minCount);
+            addRules((ParseNodeDrawable)parseTree.getRoot());
+        }
+        updateTypes();
+        this.minCount = minCount;
+    }
+
+    /**
      * Constructs the lexicon from the given treebank. Reads each tree and for each leaf node in each tree puts the
      * symbol in the dictionary.
      * @param treeBank Treebank containing the constituency trees.
@@ -102,6 +126,22 @@ public class ContextFreeGrammar {
             ArrayList<ParseNode> leafList = nodeCollector.collect();
             for (ParseNode parseNode : leafList){
                 dictionary.put(parseNode.getData().getName());
+            }
+        }
+    }
+
+    /**
+     * Constructs the lexicon from the given treebank. Reads each tree and for each leaf node in each tree puts the
+     * symbol in the dictionary.
+     * @param treeBank Treebank containing the constituency trees.
+     */
+    protected void constructDictionary(TreeBankDrawable treeBank){
+        for (int i = 0; i < treeBank.size(); i++){
+            ParseTreeDrawable parseTree = treeBank.get(i);
+            NodeDrawableCollector nodeCollector = new NodeDrawableCollector((ParseNodeDrawable) parseTree.getRoot(), new IsLeafNode());
+            ArrayList<ParseNodeDrawable> leafList = nodeCollector.collect();
+            for (ParseNodeDrawable parseNode : leafList){
+                dictionary.put(parseNode.getLayerData(ViewLayerType.TURKISH_WORD));
             }
         }
     }
@@ -129,6 +169,34 @@ public class ContextFreeGrammar {
             } else {
                 if (dictionary.count(data) < minCount){
                     parseNode.setData(new Symbol("_rare_"));
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates the exceptional symbols of the leaf nodes in the trees. Constituency trees consists of rare symbols and
+     * numbers, which are usually useless in creating constituency grammars. This is due to the fact that, numbers may
+     * not occur exactly the same both in the train and/or test set, although they have the same meaning in general.
+     * Similarly, when a symbol occurs in the test set but not in the training set, there will not be any rule covering
+     * that symbol and therefore no parse tree will be generated. For those reasons, the leaf nodes containing numerals
+     * are converted to the same terminal symbol, i.e. _num_; the leaf nodes containing rare symbols are converted to
+     * the same terminal symbol, i.e. _rare_.
+     * @param parseTree Parse tree to be updated.
+     * @param minCount Minimum frequency for the terminal symbols to be considered as rare.
+     */
+    public void updateExceptionalWordsInTree(ParseTreeDrawable parseTree, int minCount){
+        NodeDrawableCollector nodeCollector = new NodeDrawableCollector((ParseNodeDrawable) parseTree.getRoot(), new IsLeafNode());
+        ArrayList<ParseNodeDrawable> leafList = nodeCollector.collect();
+        Pattern pattern1 = Pattern.compile("\\+?\\d+");
+        Pattern pattern2 = Pattern.compile("\\+?(\\d+)?\\.\\d*");
+        for (ParseNodeDrawable parseNode : leafList){
+            String data = parseNode.getLayerData(ViewLayerType.TURKISH_WORD);
+            if (pattern1.matcher(data).matches() || (pattern2.matcher(data).matches() && !data.equals("."))){
+                parseNode.getLayerInfo().setLayerData(ViewLayerType.TURKISH_WORD, "_num_");
+            } else {
+                if (dictionary.count(data) < minCount){
+                    parseNode.getLayerInfo().setLayerData(ViewLayerType.TURKISH_WORD, "_rare_");
                 }
             }
         }
@@ -237,6 +305,47 @@ public class ContextFreeGrammar {
     }
 
     /**
+     * Converts a parse node in a tree to a rule. The symbol in the parse node will be the symbol on the leaf side of the
+     * rule, the symbols in the child nodes will be the symbols on the right hand side of the rule.
+     * @param parseNode Parse node for which a rule will be created.
+     * @param trim If true, the tags will be trimmed. If the symbol's data contains '-' or '=', this method trims all
+     *             characters after those characters.
+     * @return A new rule constructed from a parse node and its children.
+     */
+    public static Rule toRule(ParseNodeDrawable parseNode, boolean trim){
+        Symbol left;
+        Symbol data;
+        ArrayList<Symbol> right = new ArrayList<>();
+        if (parseNode.isLeaf()){
+            data = new Symbol(parseNode.getLayerData(ViewLayerType.TURKISH_WORD));
+        } else {
+            data = parseNode.getData();
+        }
+        if (trim)
+            left = data.trimSymbol();
+        else
+            left = data;
+        for (int i = 0; i < parseNode.numberOfChildren(); i++) {
+            ParseNodeDrawable childNode = (ParseNodeDrawable) parseNode.getChild(i);
+            if (childNode.isLeaf()){
+                data = new Symbol(childNode.getLayerData(ViewLayerType.TURKISH_WORD));
+            } else {
+                data = childNode.getData();
+            }
+            if (data != null){
+                if (data.isTerminal() || !trim){
+                    right.add(data);
+                } else {
+                    right.add(data.trimSymbol());
+                }
+            } else {
+                return null;
+            }
+        }
+        return new Rule(left, right);
+    }
+
+    /**
      * Recursive method to generate all rules from a subtree rooted at the given node.
      * @param parseNode Root node of the subtree.
      */
@@ -250,6 +359,26 @@ public class ContextFreeGrammar {
         }
         for (int i = 0; i < parseNode.numberOfChildren(); i++) {
             ParseNode childNode = parseNode.getChild(i);
+            if (childNode.numberOfChildren() > 0){
+                addRules(childNode);
+            }
+        }
+    }
+
+    /**
+     * Recursive method to generate all rules from a subtree rooted at the given node.
+     * @param parseNode Root node of the subtree.
+     */
+    private void addRules(ParseNodeDrawable parseNode){
+        Rule newRule;
+        newRule = toRule(parseNode, true);
+        if (newRule != null){
+            addRule(newRule);
+        } else {
+            System.out.println(this);
+        }
+        for (int i = 0; i < parseNode.numberOfChildren(); i++) {
+            ParseNodeDrawable childNode = (ParseNodeDrawable) parseNode.getChild(i);
             if (childNode.numberOfChildren() > 0){
                 addRules(childNode);
             }

@@ -1,3 +1,4 @@
+import AnnotatedTree.TreeBankDrawable;
 import ContextFreeGrammar.ContextFreeGrammar;
 import ParseTree.TreeBank;
 import org.junit.Test;
@@ -16,5 +17,7 @@ public class ContextFreeGrammarTest {
         assertEquals(cfg.size(), cfg2.size());
         TreeBank treeBank2 = new TreeBank(new File("trees2"));
         ContextFreeGrammar cfg3 = new ContextFreeGrammar(treeBank2, 1);
+        TreeBankDrawable treeBank3 = new TreeBankDrawable(new File("trees3"));
+        ContextFreeGrammar cfg4 = new ContextFreeGrammar(treeBank3, 1);
     }
 }

@@ -1,3 +1,5 @@
+import AnnotatedTree.TreeBankDrawable;
+import ContextFreeGrammar.ContextFreeGrammar;
 import Corpus.Sentence;
 import ParseTree.ParseTree;
 import ParseTree.TreeBank;
@@ -20,6 +22,8 @@ public class ProbabilisticContextFreeGrammarTest {
         assertEquals(pcfg.size(), pcfg2.size());
         TreeBank treeBank2 = new TreeBank(new File("trees2"));
         ProbabilisticContextFreeGrammar pcfg3 = new ProbabilisticContextFreeGrammar(treeBank2, 1);
+        TreeBankDrawable treeBank3 = new TreeBankDrawable(new File("trees3"));
+        ProbabilisticContextFreeGrammar cfg4 = new ProbabilisticContextFreeGrammar(treeBank3, 1);
     }
 
     @Test
